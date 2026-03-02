@@ -1,1 +1,19 @@
-console.log("Hello World")
+const express = require('express');
+var cors = require('cors');
+const cookieParser = require('cookie-parser')
+
+const port = 3000;
+const app = express();
+
+const authRouter = require('./routes/auth')
+
+
+app.use(cors());
+app.use(express.json());
+app.use(cookieParser());
+
+app.use('/api/auth',authRouter);
+
+app.listen(port, () => {
+  console.log(`Example app listening at http://localhost:${port}`);
+});

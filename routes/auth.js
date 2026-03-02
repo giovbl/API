@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var jwt = require('jsonwebtoken');
 
-var db = require('../services/db');
+var db = require('../services/DB/db');
 var {auth,createSession, createAuthToken} = require('../utils/jwt_auth');
 
 require('dotenv').config();

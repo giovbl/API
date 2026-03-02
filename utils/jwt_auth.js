@@ -1,6 +1,6 @@
 var jwt = require('jsonwebtoken');
 
-var db = require('../services/db');
+var db = require('../services/DB/db');
 
 //Middle-ware function for JWT token authentication
 function auth(req,res,next){

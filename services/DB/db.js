@@ -1,6 +1,7 @@
 const mariadb = require('mariadb');
 
 const {login, addSession, sessionExists} = require('./auth')
+const {addPatient, getPatient} = require('./patient')
 
 /**
  * Creates a DB session
@@ -28,7 +29,9 @@ module.exports = {
     disconnect,
     login,
     addSession,
-    sessionExists
+    sessionExists,
+    addPatient,
+    getPatient
 }
 
 

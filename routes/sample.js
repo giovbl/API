@@ -6,10 +6,20 @@ var db = require('../services/DB/db');
 var {auth} = require('../utils/jwt_auth');
 
 /*
-    Route for getting samples data of the specified workgroup
+    Route for getting samples data for a specified user id
 */
-router.get('/',auth,(req,res) => {
+router.get('/',auth,async (req,res) => {
+
+    const userId = req.body.userId;
+
+    if(!userId)
+        res.status(400).send()
+
+    const dbs = await db.connect();
+    const out = await db.getSamples(userId) //TODO: implement the function
+    db.disconnect(dbs);
     
+    res.json(out)
 })
 
 /*

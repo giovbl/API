@@ -18,9 +18,9 @@ router.get('/',auth,async (req,res) => {
     if(!workgroupId)
         res.status(400).send()
 
-    const dbs = await db.connect();
+    const dbs = await db.connect()
     const out = await db.getSamples(dbs,workgroupId)
-    db.disconnect(dbs);
+    db.disconnect(dbs)
     
     res.json(out)
 })
@@ -48,11 +48,22 @@ router.post('/',auth,async (req,res) => {
 /*
     Route for creating a shipping a sample with the specified courier
 */
-router.get('/:id/ship',auth,(req,res) => {
+router.get('/:id/ship',auth,async (req,res) => {
 
     const id = req.params.id;
 
+    if(!req.body)
+        res.status(400).send()
     
+    const dbs = await db.connect();
+
+    if(!await db.addShipping(dbs,req.body)) 
+        res.status(500)
+
+    db.disconnect(dbs);
+
+    res.send();
+
 })
 
 /*

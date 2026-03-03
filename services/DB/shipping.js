@@ -14,8 +14,10 @@ async function addShipping(conn,shipping) {
     try{
         await conn.query(addQuery,[
             shipping.d_status,shipping.sender,
-            shipping.recipient,shipping.taken_ext_date,
-            shipping.del_date_ext,shipping.courier
+            shipping.recipient,
+            new Date(date.getTime() + 2 * 24 * 60 * 60 * 1000),
+            new Date(date.getTime() + 5 * 24 * 60 * 60 * 1000),
+            shipping.courier
         ])
         return true;
     }

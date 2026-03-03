@@ -8,6 +8,7 @@ const app = express();
 const authRouter = require('./routes/auth')
 const sampleRouter = require('./routes/sample')
 const patientRouter = require('./routes/patient')
+const shippingRouter = require('./routes/shipping')
 
 
 app.use(cors());
@@ -17,6 +18,7 @@ app.use(cookieParser());
 app.use('/api/auth',authRouter);
 app.use('/api/sample',sampleRouter);
 app.use('/api/patient',patientRouter);
+app.use('/api/shipping',shippingRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

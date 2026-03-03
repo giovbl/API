@@ -51,6 +51,9 @@ async function getPatient(conn,fiscalCode) {
     try{
         const res = await conn.query("SELECT * FROM Patient WHERE fiscalCode = ?",[fiscalCode])
 
+        if(!res)
+            return {}
+
         return res[0];
     }
     catch(error){

@@ -52,14 +52,7 @@ router.get('/:id/ship',auth,(req,res) => {
 
     const id = req.params.id;
 
-    /*
-        TODO
-
-        Steps:
-         -create shipping with selected courier
-            (generate dates at random)
-         -set shipping on Sample
-    */
+    
 })
 
 /*

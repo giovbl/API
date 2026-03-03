@@ -28,6 +28,9 @@ router.get('/',auth,async (req,res) => {
     res.json(dbres);
 })
 
+/* 
+    Route for updating the status of a shipping 
+*/
 router.put('/:id/status',auth,async (req,res) => {
 
     if(!req.body)

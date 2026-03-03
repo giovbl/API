@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt')
  * @param {mariadb.Connection} conn DB connection
  * @param {string} email email for the authentication
  * @param {string} pwd user's password
- * @return {Object} User info
+ * @return {Object} User's useful data for permissions
  */
 async function login(conn,email,pwd) {
 

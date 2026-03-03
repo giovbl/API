@@ -11,7 +11,7 @@ const addQuery = "INSERT INTO Sample("+
 
     
 /**
- * 
+ * Adds a new sample
  * @param {mariadb.Connection} conn DB connection
  * @param {Object} sample Sample data
  * @returns {boolean} If the operation is successfull
@@ -38,6 +38,12 @@ async function addSample(conn,sample)
     }
 }
 
+/**
+ * Gets all the samples created/assigned by a workgroup
+ * @param {mariadb.Connection} conn DB connection
+ * @param {number} workgroupId Workgroup ID
+ * @returns {Array<Object>} The resulting samples
+ */
 async function getSamples(conn,workgroupId) {
     try{
         const res = await conn.query(
@@ -54,7 +60,7 @@ async function getSamples(conn,workgroupId) {
 }
 
 /**
- * 
+ * Updates the sample status
  * @param {mariadb.Connection} conn DB connection 
  * @param {number} id Sample id 
  * @param {string} status New status for the sample

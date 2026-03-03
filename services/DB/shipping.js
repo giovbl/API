@@ -52,9 +52,18 @@ async function getShippings(conn,id) {
  * @returns {boolean} If the operation is successfull
  */
 async function setShippingStatus(conn,id,status) {
+
     try{
         await conn.query("UPDATE Shipping SET d_status = ? WHERE id = ?",
                          [status,id])
+
+        if(status === 'taken')
+            await conn.query("UPDATE Shipping SET taken_eff = ? WHERE id = ?",
+                         [Date.now(),id])
+
+        if(status === 'arrived')
+            await conn.query("UPDATE Shipping SET del_date_eff = ? WHERE id = ?",
+                         [Date.now(),id])
 
         return true;
     }

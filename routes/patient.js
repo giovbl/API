@@ -28,12 +28,18 @@ router.post('/',auth,async (req,res) => {
     Route for getting the specified patient's data
 */
 router.get('/',auth,async (req,res) => {
-    if(!req.body.fiscalCode)
+
+    if(!req.body)
+        res.status(400).send()
+
+    const fiscalCode = req.body.fiscalCode
+
+    if(!fiscalCode)
         res.status(400).send() 
 
     const dbs = await db.connect()
 
-    const dbres = await db.getPatient(dbs,req.body.fiscalCode)
+    const dbres = await db.getPatient(dbs,fiscalCode)
 
     db.disconnect(dbs);
 

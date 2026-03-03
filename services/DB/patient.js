@@ -51,11 +51,6 @@ async function getPatient(conn,fiscalCode) {
     try{
         const res = await conn.query("SELECT * FROM Patient WHERE fiscalCode = ?",[fiscalCode])
 
-        if(!res)
-            return null
-
-        //TODO: correcty parse only the date
-
         return res[0];
     }
     catch(error){

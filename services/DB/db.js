@@ -6,6 +6,7 @@ const {addSample, getSamples, getSample, setSampleStatus} = require('./sample')
 const {addShipping, getShippings, setShippingStatus} = require('./shipping')
 const {getFacility, getWorkgroup}  = require('./facility')
 const {addReferto, getReferto, getRefertoRes} = require('./referto')
+const {getUserWorkgroupID} = require('./user')
 
 /**
  * Creates a DB session
@@ -47,5 +48,6 @@ module.exports = {
     getWorkgroup,
     addReferto,
     getReferto,
-    getRefertoRes
+    getRefertoRes,
+    getUserWorkgroupID
 }

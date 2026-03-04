@@ -10,23 +10,15 @@ var {auth} = require('../utils/jwt_auth');
 */
 router.get('/',auth,async (req,res) => {
 
-    if(!req.body)
-        res.status(400).send()
-
-    const workgroupId = req.body.workgroupId;
-
-    if(!workgroupId)
-        res.status(400).send()
-
     const dbs = await db.connect()
-    const out = await db.getSamples(dbs,workgroupId)
+    const out = await db.getSamples(dbs,await db.getUserWorkgroupID(req.user.id))
 
     //Adding requested workgroup data
     if(req.body){
 
         for (var i = 0; i < dbres.length; i++) {
 
-            if(req.body.analystWrkgroup){
+            if(req.body.analystWorkgroup){
                 out[i].analystWorkgroup = await db.getWorkgroup(dbs,out[i].analystWorkgroup)
                 out[i].analystWorkgroup.facilityNome = await db.getFacility().nome
             }

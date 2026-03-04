@@ -45,7 +45,7 @@ async function addPatient(conn,patient) {
 /**
  * Creates a new patient
  * @param {mariadb.Connection} conn DB connection
- * @returns {Object} patient Patient data
+ * @returns {Object} Patient data
  */
 async function getPatient(conn,fiscalCode) {
     try{

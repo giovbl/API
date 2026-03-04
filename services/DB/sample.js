@@ -60,6 +60,29 @@ async function getSamples(conn,workgroupId) {
 }
 
 /**
+ * Gets all the samples created/assigned by a workgroup
+ * @param {mariadb.Connection} conn DB connection
+ * @param {number} id Sample ID
+ * @returns {Array<Object>} The resulting samples
+ */
+async function getSample(conn,id) {
+    try{
+        const res = await conn.query(
+                        "SELECT * FROM Sample "+
+                        "WHERE id = ?",[id])
+
+        if(!res)
+            return {}
+
+        return res[0];
+    }
+    catch(error){
+        console.log(error)
+        return null;
+    }
+}
+
+/**
  * Updates the sample status
  * @param {mariadb.Connection} conn DB connection 
  * @param {number} id Sample id 
@@ -83,5 +106,6 @@ async function setSampleStatus(conn,id,status) {
 module.exports = {
     addSample,
     getSamples,
+    getSample,
     setSampleStatus
 }

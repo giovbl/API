@@ -9,7 +9,7 @@ async function getUserWorkgroupID(conn,id) {
         if(!res)
             return {}
 
-        return res[0];
+        return res[0].workgroup;
     }
     catch(error){
         console.log(error)

@@ -1,6 +1,27 @@
 
 /**
- * Gets data about the spcified facility
+ * Gets data about the specified workgroup
+ * @param {mariadb.Connection} conn 
+ * @param {number} id Workgroup ID
+ * @returns {Object} The requested Workgroup
+ */
+async function getWorkgroup(conn,id) {
+    try{
+        const res = await conn.query("SELECT * FROM WorkGroup WHERE id = ?",[id])
+
+        if(!res)
+            return {}
+
+        return res[0];
+    }
+    catch(error){
+        console.log(error)
+        return null;
+    }
+}
+
+/**
+ * Gets data about the specified facility
  * @param {mariadb.Connection} conn DB connection
  * @param {number} id Facility ID
  * @returns {Object} The specified facility
@@ -21,5 +42,6 @@ async function getFacility(conn,id) {
 }
 
 module.exports = {
-    getFacility
+    getFacility,
+    getWorkgroup
 }

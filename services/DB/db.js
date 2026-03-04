@@ -4,7 +4,7 @@ const {login, addSession, sessionExists} = require('./auth')
 const {addPatient, getPatient} = require('./patient')
 const {addSample, getSamples, getSample, setSampleStatus} = require('./sample')
 const {addShipping, getShippings, setShippingStatus} = require('./shipping')
-const {getFacility}  = require('./facility')
+const {getFacility, getWorkgroup}  = require('./facility')
 const {addReferto, getReferto, getRefertoRes} = require('./referto')
 
 /**
@@ -44,6 +44,7 @@ module.exports = {
     getShippings,
     setShippingStatus,
     getFacility,
+    getWorkgroup,
     addReferto,
     getReferto,
     getRefertoRes

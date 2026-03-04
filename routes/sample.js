@@ -20,6 +20,24 @@ router.get('/',auth,async (req,res) => {
 
     const dbs = await db.connect()
     const out = await db.getSamples(dbs,workgroupId)
+
+    //Adding requested workgroup data
+    if(req.body){
+
+        for (var i = 0; i < dbres.length; i++) {
+
+            if(req.body.analystWrkgroup){
+                out[i].analystWorkgroup = await db.getWorkgroup(dbs,out[i].analystWorkgroup)
+                out[i].analystWorkgroup.facilityNome = await db.getFacility().nome
+            }
+
+            if(req.body.oncologiWrkgroup){
+                out[i].oncologiWorkgroup = await db.getWorkgroup(dbs,out[i].oncologiWorkgroup)
+                out[i].oncologiWorkgroup.facilityName = await db.getFacility().nome
+            }
+        }
+    }
+
     db.disconnect(dbs)
     
     res.json(out)

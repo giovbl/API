@@ -41,7 +41,26 @@ async function getFacility(conn,id) {
     }
 }
 
+/**
+ * Gets all the workgroups of a facility
+ * @param {mariadb.Connection} conn DB connection
+ * @param {number} facilityId Facility ID
+ * @returns {Array<Object>} The resulting workgroups
+ */
+async function getWorkgroups(conn,facilityId) {
+    try{
+        const res = await conn.query("SELECT * FROM WorkGroup WHERE facility = ?",[facilityId])
+
+        return res.filter((item)=> item.type === 'analyst');
+    }
+    catch(error){
+        console.log(error)
+        return null;
+    }
+}
+
 module.exports = {
     getFacility,
-    getWorkgroup
+    getWorkgroup,
+    getWorkgroups
 }

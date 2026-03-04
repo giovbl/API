@@ -29,7 +29,7 @@ router.get('/',auth,async (req,res) => {
             if(req.body.oncologiWorkgroup){
                 out[i].oncologiWorkgroup = await db.getWorkgroup(dbs,out[i].oncologiWorkgroup)
                 
-                const fac = await db.getFacility(dbs,out[i].oncologiWorkgroup.facility);
+                const fac = await db.getFacility(dbs,out[i].oncologiWorkgroup.facility)
                 out[i].oncologiWorkgroup.facility = {nome: fac.nome, id: fac.id}
             }
         }

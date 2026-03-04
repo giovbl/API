@@ -25,7 +25,7 @@ const addRefertoResQuery = "INSERT INTO RefertoRes("+
     ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING id"
 
 /**
- * 
+ * Creates a referto
  * @param {mariadb.Connection} conn DB connection
  * @param {Object} referto Elegibility data about the referto
  * @param {Object} result Results about the referto
@@ -78,6 +78,12 @@ async function addReferto(conn,referto,result) {
     }
 }
 
+/**
+ * Gets data about a referto
+ * @param {mariadb.Connection} conn DB connection
+ * @param {number} id Referto ID
+ * @returns {Object} The requested referto
+ */
 async function getReferto(conn,id) {
 
     try{
@@ -95,6 +101,12 @@ async function getReferto(conn,id) {
 
 }
 
+/**
+ * Gets results about a referto
+ * @param {mariadb.Connection} conn DB connection
+ * @param {number} id Referto Results ID
+ * @returns {Object} The requested referto results
+ */
 async function getRefertoRes(conn,id) {
 
     try{

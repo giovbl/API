@@ -63,7 +63,7 @@ async function getSamples(conn,workgroupId) {
  * Gets all the samples created/assigned by a workgroup
  * @param {mariadb.Connection} conn DB connection
  * @param {number} id Sample ID
- * @returns {Array<Object>} The resulting samples
+ * @returns {Object} The resulting sample
  */
 async function getSample(conn,id) {
     try{

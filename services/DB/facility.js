@@ -1,15 +1,20 @@
 
 const getWorkgroupPartialQuery = "SELECT id,groupName,groupType,facility "
 
+const getFacilityPartialQuery = "SELECT "+
+                        "id,nome,residenceRegion,"+
+                        "residenceCity,residenceProvince,cap,"+
+                        "r_address AS 'address',civicNumber ";
+
 const getWorkgroupQuery = getWorkgroupPartialQuery + "FROM WorkGroup WHERE id = ?";
 
 const getWorkgroupsQuery = getWorkgroupPartialQuery+ "FROM WorkGroup WHERE facility = ?"
 
-const getFacilityQuery = "SELECT "+
-                        "id,nome,residenceRegion,"+
-                        "residenceCity,residenceProvince,cap,"+
-                        "r_address AS 'address',civicNumber "+
+const getFacilityQuery = getFacilityPartialQuery +
                         "FROM Facility WHERE id = ?"
+
+const getFacilitiesQuery = getFacilityPartialQuery + "FROM Facility"
+                        
 
 /**
  * Gets data about the specified workgroup
@@ -54,7 +59,25 @@ async function getFacility(conn,id) {
 }
 
 /**
- * Gets all the workgroups of a facility
+ * Gets all the avaliable facilities
+ * @param {mariadb.Connection} conn DB connection
+ * @param {number} id Facility ID
+ * @returns {Object} The specified facility
+ */
+async function getFacilities(conn) {
+    try{
+        const res = await conn.query(getFacilitiesQuery)
+
+        return res;
+    }
+    catch(error){
+        console.log(error)
+        return null;
+    }
+}
+
+/**
+ * Gets all the workgroups of a facility (only analyst ones)
  * @param {mariadb.Connection} conn DB connection
  * @param {number} facilityId Facility ID
  * @returns {Array<Object>} The resulting workgroups
@@ -63,7 +86,7 @@ async function getWorkgroups(conn,facilityId) {
     try{
         const res = await conn.query(getWorkgroupsQuery,[facilityId])
 
-        return res.filter((item)=> item.type === 'analyst');
+        return res.filter((item)=> item.groupType === 'analyst');
     }
     catch(error){
         console.log(error)
@@ -73,6 +96,7 @@ async function getWorkgroups(conn,facilityId) {
 
 module.exports = {
     getFacility,
+    getFacilities,
     getWorkgroup,
     getWorkgroups
 }

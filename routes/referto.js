@@ -76,6 +76,8 @@ router.post('/:id/file',upload.single('refpdf'),async (req,res) => {
     if(!await db.addPDF(dbs,id,fileName))
         res.status(500)
 
+    db.disconnect(dbs)
+
     res.send()
 })
 

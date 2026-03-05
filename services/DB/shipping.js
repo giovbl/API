@@ -1,7 +1,7 @@
 const addQuery = "INSERT INTO Shipping("+
-                "d_status,sender,recipient,"+
+                "sender,recipient,"+
                 "taken_ext_date,del_date_ext,courier"+
-                ") VALUES (?,?,?,?,?,?)"
+                ") VALUES (?,?,?,?,?)"
 
 const getShippingsQuery = "SELECT id,"+
                         "d_status AS 'status',"+
@@ -22,10 +22,10 @@ async function addShipping(conn,shipping) {
 
     try{
         await conn.query(addQuery,[
-            shipping.status,shipping.sender,
+            shipping.sender,
             shipping.recipient,
-            new Date(date.getTime() + 2 * 24 * 60 * 60 * 1000),
-            new Date(date.getTime() + 5 * 24 * 60 * 60 * 1000),
+            new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+            new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
             shipping.courier
         ])
         return true;
@@ -70,11 +70,11 @@ async function setShippingStatus(conn,id,status) {
 
         if(status === 'taken')
             await conn.query("UPDATE Shipping SET taken_eff = ? WHERE id = ?",
-                         [Date.now(),id])
+                         [new Date(Date.now()),id])
 
         if(status === 'arrived')
             await conn.query("UPDATE Shipping SET del_date_eff = ? WHERE id = ?",
-                         [Date.now(),id])
+                         [new Date(Date.now()),id])
 
         return true;
     }

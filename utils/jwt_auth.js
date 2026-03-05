@@ -23,6 +23,27 @@ function auth(req,res,next){
 
 }
 
+/*
+    Function for athenticating a user.
+*/
+async function authFun(req){
+
+    //Cookie containing the authentication token
+    const authCookie = req.cookies['authToken'];
+
+    if(authCookie == null) 
+        return {user: null, failed: true}
+
+    try{
+        const usr = await jwt.verify(authCookie, process.env.JWT_AUTH_SECRET)
+
+        return {user: usr, failed: false}
+    } catch{
+        return {user: null, failed:true}
+    }
+
+}
+
 /**
  * Creates a session for a user
  * @param db Database object
@@ -56,6 +77,7 @@ function createAuthToken(user) {
 
 module.exports = {
     auth,
+    authFun,
     createSession,
     createAuthToken
 }

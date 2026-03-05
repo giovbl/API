@@ -8,7 +8,7 @@ const upload = multer({ storage: storage })
 var db = require('../services/DB/db');
 var s3 = require('../services/storage/s3')
 
-var {auth} = require('../utils/jwt_auth');
+var {auth,authFun} = require('../utils/jwt_auth');
 
 /*
     Route for creating a referto
@@ -38,7 +38,6 @@ router.get('/:id',auth,async (req,res) => {
 
     //Getting Referto results if exists
     if(out.result){
-
         out.result = await db.getRefertoRes(dbs,out.result)
 
         const s3c = s3.initializeClient()
@@ -59,8 +58,13 @@ router.get('/:id',auth,async (req,res) => {
 */
 router.post('/:id/file',upload.single('refpdf'),async (req,res) => {
 
-    //auth(req,res,next)
     const id = req.params.id
+
+    //Authentication
+    const auth = authFun(req);
+
+    if(auth.failed)
+        res.status(401).send()
 
     if(!req.body)
         res.status(400).send()

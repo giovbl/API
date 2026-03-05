@@ -1,10 +1,10 @@
 
+const getWorkgroupIDQuery = "SELECT workgroup FROM User WHERE id = ?"
+
 async function getUserWorkgroupID(conn,id) {
 
     try{
-        const res = await conn.query(
-                        "SELECT workgroup FROM User "+
-                        "WHERE id = ?",[id])
+        const res = await conn.query(getWorkgroupIDQuery,[id])
 
         if(!res)
             return {}

@@ -1,4 +1,16 @@
 
+const getWorkgroupPartialQuery = "SELECT id,groupName,groupType,facility "
+
+const getWorkgroupQuery = getWorkgroupPartialQuery + "FROM WorkGroup WHERE id = ?";
+
+const getWorkgroupsQuery = getWorkgroupPartialQuery+ "FROM WorkGroup WHERE facility = ?"
+
+const getFacilityQuery = "SELECT "+
+                        "id,nome,residenceRegion,"+
+                        "residenceCity,residenceProvince,cap,"+
+                        "r_address AS 'address',civicNumber "+
+                        "FROM Facility WHERE id = ?"
+
 /**
  * Gets data about the specified workgroup
  * @param {mariadb.Connection} conn 
@@ -7,7 +19,7 @@
  */
 async function getWorkgroup(conn,id) {
     try{
-        const res = await conn.query("SELECT * FROM WorkGroup WHERE id = ?",[id])
+        const res = await conn.query(getWorkgroupQuery,[id])
 
         if(!res)
             return {}
@@ -28,7 +40,7 @@ async function getWorkgroup(conn,id) {
  */
 async function getFacility(conn,id) {
     try{
-        const res = await conn.query("SELECT * FROM Facility WHERE id = ?",[id])
+        const res = await conn.query(getFacilityQuery,[id])
 
         if(!res)
             return {}
@@ -49,7 +61,7 @@ async function getFacility(conn,id) {
  */
 async function getWorkgroups(conn,facilityId) {
     try{
-        const res = await conn.query("SELECT * FROM WorkGroup WHERE facility = ?",[facilityId])
+        const res = await conn.query(getWorkgroupsQuery,[facilityId])
 
         return res.filter((item)=> item.type === 'analyst');
     }

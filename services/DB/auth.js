@@ -13,8 +13,6 @@ async function login(conn,email,pwd) {
     try{
         const rows = await conn.query("SELECT id,pwd,userType FROM User WHERE email= ?",[email])
 
-        console.log(rows)
-
         if(rows.length > 0 && await bcrypt.compare(pwd,rows[0].pwd))
             return {id:rows[0].id,type:rows[0].userType};
 

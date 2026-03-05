@@ -47,7 +47,7 @@ router.get('/:id',auth,async (req,res) => {
 
     //Getting sample data if specified
     if(req.body && req.body.getSample)
-        out.ref_sample = await db.getSample(dbs,out.ref_sample)
+        out.sample = await db.getSample(dbs,out.sample)
 
     db.disconnect(dbs)
     

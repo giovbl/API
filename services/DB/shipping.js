@@ -3,6 +3,15 @@ const addQuery = "INSERT INTO Shipping("+
                 "taken_ext_date,del_date_ext,courier"+
                 ") VALUES (?,?,?,?,?,?)"
 
+const getShippingsQuery = "SELECT "+
+                        "d_status AS 'status',"+
+                        "sender,recipient,"+
+                        "taken_ext_date AS expectedTakenDate,"+
+                        "del_date_ext AS expectedDeliveryDate,"+
+                        "taken_eff AS effectiveTakenDate,"+
+                        "del_date_eff AS effectiveDeliveryDate "+
+                        "FROM Shipping WHERE courier = ?"
+
 /**
  * Adds shipping informations
  * @param {mariadb.Connection} conn DB connection
@@ -13,7 +22,7 @@ async function addShipping(conn,shipping) {
 
     try{
         await conn.query(addQuery,[
-            shipping.d_status,shipping.sender,
+            shipping.status,shipping.sender,
             shipping.recipient,
             new Date(date.getTime() + 2 * 24 * 60 * 60 * 1000),
             new Date(date.getTime() + 5 * 24 * 60 * 60 * 1000),
@@ -36,7 +45,7 @@ async function addShipping(conn,shipping) {
  */
 async function getShippings(conn,id) {
     try{
-        const res = await conn.query("SELECT * FROM Shipping WHERE courier = ?",[id])
+        const res = await conn.query(getShippingsQuery,[id])
 
         return res;
     }

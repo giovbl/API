@@ -12,9 +12,6 @@ const addRefertoSampleElReasonQuery = "UPDATE RefertoEligible"+
                                 "SET reasonSampleNotElegible = ?"+
                                 "WHERE id = ?"
 
-const addRefertoResultQuery = "UPDATE RefertoEligible "+
-                              "SET result = ? WHERE id = ?"
-
 const addRefertoResQuery = "INSERT INTO RefertoRes("+
     "dnaQuality,technique,genomicInstabilityStatus,"+
     "lossOfHeterozygosityPercentage,genomicInstabilityMetric,"+
@@ -28,6 +25,24 @@ const addPDFQuery = "UPDATE RefertoRes SET file_pdf = ? "+
                     "WHERE id = ( SELECT result FROM RefertoElegibile "+
                                 "WHERE id = ? )"
 
+const getRefertoQuery = "SELECT "+
+                        "isLabelEligible,isSampleElegible,"+
+                        "result,ref_sample AS 'sample' "+
+                        "FROM RefertoElegibile WHERE id = ?"
+
+const getRefertoResQuery = "SELECT "+
+    "dnaQuality,technique,genomicInstabilityStatus,"+
+    "lossOfHeterozygosityPercentage,"+
+    "genomicInstabilityMetric,hrdStatus,"+
+    "hrdScore,genomicIntegrityStatus,"+
+    "brcaMutationStatus,genotypeBrca,"+
+    "variantStatus,geneMutation,geneOther,"+
+    "exon,intron,nucleotideSubstitution,"+
+    "aminoacidSubstitution,reportingNotes,"+
+    "reportingNotesBRCA,refertingNotesHrd,"+
+    "technicalNotes,notesAnalysisCenter "+
+    "FROM RefertoRes WHERE id = ?"
+
 /**
  * Creates a referto
  * @param {mariadb.Connection} conn DB connection
@@ -40,7 +55,7 @@ async function addReferto(conn,referto,result) {
         const refId = await conn.query(addRefertoEssentialsQuery,[
             referto.isLabelEligible,
             referto.isSampleElegible,
-            referto.ref_sample
+            referto.sample
         ])
 
         if(!referto.isLabelEligible){
@@ -71,7 +86,8 @@ async function addReferto(conn,referto,result) {
                 result.technicalNotes,result.notesAnalysisCenter
             ])
 
-            await conn.query(addRefertoResultQuery,[resId,refId])
+            await conn.query("UPDATE RefertoEligible SET result = ? WHERE id = ?",
+                            [resId,refId])
         }
 
         return true;
@@ -91,7 +107,7 @@ async function addReferto(conn,referto,result) {
 async function getReferto(conn,id) {
 
     try{
-        const res = await conn.query("SELECT * FROM RefertoElegibile WHERE id = ?",[id])
+        const res = await conn.query(getRefertoQuery,[id])
 
         if(!res)
             return {}
@@ -114,7 +130,7 @@ async function getReferto(conn,id) {
 async function getRefertoRes(conn,id) {
 
     try{
-        const res = await conn.query("SELECT * FROM RefertoRes WHERE id = ?",[id])
+        const res = await conn.query(getRefertoResQuery,[id])
 
         if(!res)
             return {}

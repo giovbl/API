@@ -9,6 +9,17 @@ const addQuery = "INSERT INTO Sample("+
     "pathologistNotes,patient,analysisStat,shipping,oncologiWorkgroup"+
     ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 
+const selectQuery ="SELECT "
+                "analystWorkgroup,typeOfBiologicalMaterial,"+
+                "exhaustedBiologicalMaterial,histologicalNumber,"+
+                "tissuePreservationMode,tissueSamplingMode,"+
+                "otherTissueSamplingMode,biopsyType,"+
+                "tissueProvenance,metaStaticSite,pctTumorCells,"+
+                "ageOfSample,isCourierUsed,pathologistNotes,"+
+                "patient,analysisStat,shipping,oncologiWorkgroup "+
+                "FROM Sample "+
+                "WHERE (analystWorkgroup = ?) OR (oncologiWorkgroup = ?)"
+
     
 /**
  * Adds a new sample

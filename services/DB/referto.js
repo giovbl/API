@@ -4,11 +4,11 @@ const addRefertoEssentialsQuery = "INSERT INTO RefertoElegibile("+
                                   "result,ref_sample"+
                                   ") VALUES(?,?,?,?) RETURNING id"
 
-const addRefertoLabelReasonQuery = "UPDATE RefertoEligible"+
+const addRefertoLabelReasonQuery = "UPDATE RefertoElegibile"+
             "SET notElegibleReason = ?,otherNotElegibleReason = ? "+
             "WHERE id = ?"
 
-const addRefertoSampleElReasonQuery = "UPDATE RefertoEligible"+
+const addRefertoSampleElReasonQuery = "UPDATE RefertoElegibile"+
                                 "SET reasonSampleNotElegible = ?"+
                                 "WHERE id = ?"
 
@@ -21,9 +21,8 @@ const addRefertoResQuery = "INSERT INTO RefertoRes("+
     "reportingNotesBRCA,refertingNotesHrd,technicalNotes,notesAnalysisCenter"+
     ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING id"
 
-const addPDFQuery = "UPDATE RefertoRes SET file_pdf = ? "+
-                    "WHERE id = ( SELECT result FROM RefertoElegibile "+
-                                "WHERE id = ? )"
+const addPDFQuery = "UPDATE RefertoElegibile SET file_pdf = ? "+
+                    "WHERE id = ?"
 
 const getRefertoQuery = "SELECT id,"+
                         "isLabelEligible,isSampleElegible,"+
@@ -86,7 +85,7 @@ async function addReferto(conn,referto,result) {
                 result.technicalNotes,result.notesAnalysisCenter
             ])
 
-            await conn.query("UPDATE RefertoEligible SET result = ? WHERE id = ?",
+            await conn.query("UPDATE RefertoElegibile SET result = ? WHERE id = ?",
                             [resId,refId])
         }
 

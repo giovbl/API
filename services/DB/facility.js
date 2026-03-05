@@ -13,7 +13,7 @@ const getFacilityQuery = "SELECT "+
 
 /**
  * Gets data about the specified workgroup
- * @param {mariadb.Connection} conn 
+ * @param {mariadb.Connection} conn DB connection
  * @param {number} id Workgroup ID
  * @returns {Object} The requested Workgroup
  */

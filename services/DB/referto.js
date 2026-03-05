@@ -24,6 +24,10 @@ const addRefertoResQuery = "INSERT INTO RefertoRes("+
     "reportingNotesBRCA,refertingNotesHrd,technicalNotes,notesAnalysisCenter"+
     ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING id"
 
+const addPDFQuery = "UPDATE RefertoRes SET file_pdf = ? "+
+                    "WHERE id = ( SELECT result FROM RefertoElegibile "+
+                                "WHERE id = ? )"
+
 /**
  * Creates a referto
  * @param {mariadb.Connection} conn DB connection
@@ -87,7 +91,7 @@ async function addReferto(conn,referto,result) {
 async function getReferto(conn,id) {
 
     try{
-        const res = await conn.query("SELECT * FROM RefertoEligibile WHERE id = ?",[id])
+        const res = await conn.query("SELECT * FROM RefertoElegibile WHERE id = ?",[id])
 
         if(!res)
             return {}
@@ -124,8 +128,28 @@ async function getRefertoRes(conn,id) {
 
 }
 
+/**
+ * Adds PDF reference to a referto's result
+ * @param {mariadb.Connection} conn DB connection
+ * @param {number} refertoId Referto ID
+ * @param {string} fileName PDF reference
+ */
+async function addPDF(conn,refertoId,fileName) {
+    try{
+        await conn.query(addPDFQuery,
+                         [fileName,refertoId])
+
+        return true;
+    }
+    catch(error){
+        console.log(error)
+        return false;
+    }
+}
+
 module.exports = {
     addReferto,
     getReferto,
-    getRefertoRes
+    getRefertoRes,
+    addPDF
 }

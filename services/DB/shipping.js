@@ -3,7 +3,7 @@ const addQuery = "INSERT INTO Shipping("+
                 "taken_ext_date,del_date_ext,courier"+
                 ") VALUES (?,?,?,?,?,?)"
 
-const getShippingsQuery = "SELECT "+
+const getShippingsQuery = "SELECT id,"+
                         "d_status AS 'status',"+
                         "sender,recipient,"+
                         "taken_ext_date AS expectedTakenDate,"+

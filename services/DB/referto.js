@@ -25,7 +25,7 @@ const addPDFQuery = "UPDATE RefertoRes SET file_pdf = ? "+
                     "WHERE id = ( SELECT result FROM RefertoElegibile "+
                                 "WHERE id = ? )"
 
-const getRefertoQuery = "SELECT "+
+const getRefertoQuery = "SELECT id,"+
                         "isLabelEligible,isSampleElegible,"+
                         "result,ref_sample AS 'sample' "+
                         "FROM RefertoElegibile WHERE id = ?"

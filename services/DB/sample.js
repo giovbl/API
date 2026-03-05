@@ -9,7 +9,7 @@ const addQuery = "INSERT INTO Sample("+
     "pathologistNotes,patient,analysisStat,shipping,oncologiWorkgroup"+
     ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 
-const selectInitialQuery ="SELECT "+
+const selectInitialQuery ="SELECT id,"+
                 "analystWorkgroup,typeOfBiologicalMaterial,"+
                 "exhaustedBiologicalMaterial,histologicalNumber,"+
                 "tissuePreservationMode,tissueSamplingMode,"+

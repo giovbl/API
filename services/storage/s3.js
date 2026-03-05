@@ -1,6 +1,6 @@
 const crypto = require('crypto');
 
-const { S3Client, PutObjectCommand, GetObjectCommand, NoSuchKey, S3ServiceException } = require("@aws-sdk/client-s3");
+const { S3Client, PutObjectCommand, GetObjectCommand, S3ServiceException } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 /**
@@ -70,8 +70,7 @@ async function addObject(client,objBuffer,objMeta) {
         ContentType: objMeta
     })
 
-    try{
-        
+    try{    
         await client.send(command);
 
         return objName;

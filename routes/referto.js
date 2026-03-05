@@ -25,7 +25,7 @@ router.post('/',auth,async (req,res) => {
     res.send()
 })
 
-/* 
+/*
     Route for getting data about a referto
 */
 router.get('/:id',auth,async (req,res) => {

@@ -177,7 +177,7 @@ async function getRefertoId(conn,sampleId) {
         if(!res)
             return {}
 
-        return res[0];
+        return res[0].id;
     }
     catch(error){
         console.log(error)

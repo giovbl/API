@@ -163,9 +163,32 @@ async function addPDF(conn,refertoId,fileName) {
     }
 }
 
+/**
+ * Gets the id of the referto associated to the sample
+ * @param {mariadb.Connection} conn DB connection
+ * @param {*} sampleId Sample ID
+ * @returns The id of the referto
+ */
+async function getRefertoId(conn,sampleId) {
+    try{
+        const res = await conn.query("SELECT id FROM RefertoEligible WHERE ref_sample = ?",
+                                    [sampleId])
+
+        if(!res)
+            return {}
+
+        return res[0];
+    }
+    catch(error){
+        console.log(error)
+        return null;
+    }
+}
+
 module.exports = {
     addReferto,
     getReferto,
     getRefertoRes,
+    getRefertoId,
     addPDF
 }

@@ -31,6 +31,8 @@ router.get('/',auth,async (req,res) => {
                 
                 const fac = await db.getFacility(dbs,out[i].oncologiWorkgroup.facility)
                 out[i].oncologiWorkgroup.facility = {nome: fac.nome, id: fac.id}
+
+                out[i].referto = await db.getRefertoId(dbs,out[i].id)
             }
         }
     }

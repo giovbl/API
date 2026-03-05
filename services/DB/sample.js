@@ -113,7 +113,6 @@ async function setSampleStatus(conn,id,status) {
     }
 }
 
-
 module.exports = {
     addSample,
     getSamples,

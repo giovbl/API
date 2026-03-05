@@ -9,7 +9,7 @@ const addQuery = "INSERT INTO Sample("+
     "pathologistNotes,patient,analysisStat,shipping,oncologiWorkgroup"+
     ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 
-const selectQuery ="SELECT "
+const selectInitialQuery ="SELECT "
                 "analystWorkgroup,typeOfBiologicalMaterial,"+
                 "exhaustedBiologicalMaterial,histologicalNumber,"+
                 "tissuePreservationMode,tissueSamplingMode,"+
@@ -17,8 +17,11 @@ const selectQuery ="SELECT "
                 "tissueProvenance,metaStaticSite,pctTumorCells,"+
                 "ageOfSample,isCourierUsed,pathologistNotes,"+
                 "patient,analysisStat,shipping,oncologiWorkgroup "+
-                "FROM Sample "+
-                "WHERE (analystWorkgroup = ?) OR (oncologiWorkgroup = ?)"
+                "FROM Sample "
+
+const getSamplesQuery = selectInitialQuery + "WHERE (analystWorkgroup = ?) OR (oncologiWorkgroup = ?)"
+
+const getSampleQuery = selectInitialQuery + "WHERE id = ?"
 
     
 /**
@@ -57,10 +60,8 @@ async function addSample(conn,sample)
  */
 async function getSamples(conn,workgroupId) {
     try{
-        const res = await conn.query(
-                        "SELECT * FROM Sample "+
-                        "WHERE (analystWorkgroup = ?) OR (oncologiWorkgroup = ?)",
-                        [workgroupId,workgroupId])
+        const res = await conn.query(getSamplesQuery,
+                                    [workgroupId,workgroupId])
 
         return res;
     }
@@ -78,9 +79,7 @@ async function getSamples(conn,workgroupId) {
  */
 async function getSample(conn,id) {
     try{
-        const res = await conn.query(
-                        "SELECT * FROM Sample "+
-                        "WHERE id = ?",[id])
+        const res = await conn.query(getSampleQuery,[id])
 
         if(!res)
             return {}

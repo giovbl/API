@@ -14,6 +14,10 @@ function createHash(data) {
     return hash.digest('hex');
 }
 
+/**
+ * Creates a new S3 client
+ * @returns The created client
+ */
 function initializeClient() {
     return new S3Client({
         region: "eu-north-1",
@@ -24,6 +28,12 @@ function initializeClient() {
     })
 }
 
+/**
+ * Generated a URL for a stored object
+ * @param {S3Client} client S3 client
+ * @param {string} objName Name of the object to retreive
+ * @returns {string} A URL where the object can be accessed
+ */
 async function getObjectURL(client,objName) {
     
     const command = new GetObjectCommand({
@@ -42,6 +52,13 @@ async function getObjectURL(client,objName) {
     }
 }
 
+/**
+ * Creates a new object 
+ * @param {S3Client} client S3 client
+ * @param {*} objBuffer Buffer of the object's data
+ * @param {*} objMeta Metadata of the object
+ * @returns The generated name of the object
+ */
 async function addObject(client,objBuffer,objMeta) {
 
     const objName = createHash(Date.now().toString())

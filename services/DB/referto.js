@@ -171,7 +171,7 @@ async function addPDF(conn,refertoId,fileName) {
  */
 async function getRefertoId(conn,sampleId) {
     try{
-        const res = await conn.query("SELECT id FROM RefertoEligible WHERE ref_sample = ?",
+        const res = await conn.query("SELECT id FROM RefertoElegibile WHERE ref_sample = ?",
                                     [sampleId])
 
         if(!res)

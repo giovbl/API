@@ -1,4 +1,3 @@
-const mariadb = require('mariadb');
 const bcrypt = require('bcrypt')
 
 /**

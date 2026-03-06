@@ -1,10 +1,20 @@
+const bcrypt = require('bcrypt')
 
-const getWorkgroupIDQuery = "SELECT workgroup FROM User WHERE id = ?"
+const addUserQuery = "INSERT INTO User("+
+                    "fullname,email,pwd,userType)"+
+                    "VALUES(?,?,?,?) RETURNING id"
 
+
+/**
+ * Obtains the workgroup ID of an user's workgroup
+ * @param {mariadb.Connection} conn DB connection
+ * @param {number} id User ID
+ * @returns The id of the user's workgroup
+ */
 async function getUserWorkgroupID(conn,id) {
 
     try{
-        const res = await conn.query(getWorkgroupIDQuery,[id])
+        const res = await conn.query("SELECT workgroup FROM User WHERE id = ?",[id])
 
         if(!res)
             return {}
@@ -18,6 +28,78 @@ async function getUserWorkgroupID(conn,id) {
 
 }
 
+/**
+ * Adds a new user
+ * @param {mariadb.Connection} conn DB connection
+ * @param {Object} user Data of the user to create
+ * @returns {boolean} If the operation is successfull
+ */
+async function addUser(conn,user) {
+
+    try{
+        const res = await conn.query(addUserQuery,[
+            user.fullname,user.email,
+            await bcrypt.hash(user.pwd,12),
+            user.userType
+        ])
+
+        if(!res)
+            return null
+
+        return res[0];
+    }
+    catch(error){
+        console.log(error)
+        return false;
+    }
+
+}
+
+/**
+ * Adds an user to a workgroup
+ * @param {mariadb.Connection} conn DB connection
+ * @param {number} id User ID
+ * @param {number} workgroupId Workgroup ID
+ * @returns {boolean} If the operation is successfull
+ */
+async function setUserWorkgroup(conn,id,workgroupId) {
+
+    try{
+        await conn.query("UPDATE User SET workgroup = ? WHERE id = ?",
+                        [workgroupId,id])
+
+        return true;
+    }
+    catch(error){
+        console.log(error)
+        return false;
+    }
+
+}
+
+/**
+ * Verifies if an user exists
+ * @param {mariadb.Connection} conn DB connection 
+ * @param {string} email Email related to the user
+ * @returns {boolean} If the user exists
+ */
+async function userExists(conn,email) {
+
+    try{
+        const res = await conn.query("SELECT id FROM User WHERE email = ?",[email])
+
+        return res.lenght > 0;
+    }
+    catch(error){
+        console.log(error)
+        return null;
+    }
+
+}
+
 module.exports = {
-    getUserWorkgroupID
+    addUser,
+    userExists,
+    getUserWorkgroupID,
+    setUserWorkgroup
 }

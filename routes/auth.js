@@ -74,4 +74,31 @@ router.post('/refresh',async (req,res) => {
     })
 })
 
+/*
+    Route for registering an user
+*/
+router.post('/register',async (req,res) => {
+   
+    if(!req.body)
+        res.status(400).send()
+        
+    const dbs = await db.connect();
+
+    if(db.userExists(dbs,req.body.email))
+        res.status(409).json({message:"User already exists"})
+
+    const id = await db.addUser(dbs,req.body)
+
+    if(!id)
+        res.status(500)
+
+    if(req.body.userType != "Corriere")
+        if(!await db.setUserWorkgroup(dbs,id,req.body.workgroup))
+            res.status(500)
+
+    db.disconnect(dbs)
+
+    res.send()
+})
+
 module.exports = router;

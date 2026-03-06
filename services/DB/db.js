@@ -6,7 +6,7 @@ const {addSample, getSamples, getSample, setSampleStatus, setShipping} = require
 const {addShipping, getShippings, getShipping, setShippingStatus} = require('./shipping')
 const {getFacility,getFacilities, getWorkgroup,getWorkgroups}  = require('./facility')
 const {addReferto, getReferto, getRefertoRes,getRefertoId,addPDF} = require('./referto')
-const {getUserWorkgroupID} = require('./user')
+const {getUserWorkgroupID, setUserWorkgroup, addUser, userExists} = require('./user')
 
 /**
  * Creates a DB session
@@ -55,5 +55,8 @@ module.exports = {
     getRefertoRes,
     getRefertoId,
     addPDF,
+    addUser,
+    userExists,
+    setUserWorkgroup,
     getUserWorkgroupID
 }

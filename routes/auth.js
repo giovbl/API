@@ -96,12 +96,14 @@ router.post('/register',async (req,res) => {
         res.status(500)
 
     if(req.body.userType != "Corriere")
-        if(!await db.setUserWorkgroup(dbs,id,req.body.workgroup))
-            res.status(500)
+        if(!await db.setUserWorkgroup(dbs,id,req.body.workgroup)){
+            db.disconnect(dbs)
+            res.status(500).send()
+        }
 
     db.disconnect(dbs)
 
-    res.send()
+    res.status(201).send()
 })
 
 module.exports = router;

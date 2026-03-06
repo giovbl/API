@@ -44,12 +44,14 @@ router.patch('/:id/status',auth,async (req,res) => {
     
     const dbs = await db.connect();
 
-    if(!await db.setShippingStatus(dbs,shippingId,status))
-        res.status(500)
+    if(!await db.setShippingStatus(dbs,shippingId,status)){
+        db.disconnect(dbs)
+        res.status(500).send()
+    }
 
     db.disconnect(dbs);
 
-    res.send();
+    res.sendStatus(204);
 })
 
 module.exports = router;

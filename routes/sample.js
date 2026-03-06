@@ -62,14 +62,15 @@ router.post('/',auth,async (req,res) => {
         await db.getWorkgroup(dbs,req.body.analystWorkgroupWorkgroup).facility 
     );
 
-    //Creating the sample with the informatios provided
-    if(!await db.addSample(dbs,req.body)) 
-        res.status(500)
+    //Creating the sample with the informations provided
+    if(!await db.addSample(dbs,req.body)){ 
+        db.disconnect(dbs)
+        res.status(500).send()
+    }
 
     db.disconnect(dbs);
 
-    res.send();
-
+    res.status(201).send();
 })
 
 /*
@@ -95,7 +96,6 @@ router.post('/:id/ship',auth,async (req,res) => {
     db.disconnect(dbs);
 
     res.send();
-
 })
 
 /*
@@ -114,12 +114,12 @@ router.patch('/:id/status',auth,async (req,res) => {
     
     const dbs = await db.connect();
 
-    if(!await db.setSampleStatus(dbs,id,status))
-        res.status(500)
+    if(!await db.setSampleStatus(dbs,id,status)){
+        db.disconnect(dbs);
+        res.status(500).send()
+    }
 
-    db.disconnect(dbs);
-
-    res.send();
+    res.sendStatus(204)
 })
 
 

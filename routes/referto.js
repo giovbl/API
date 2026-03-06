@@ -62,7 +62,6 @@ router.post('/:id/file',upload.single('refpdf'),async (req,res) => {
 
     //Authentication
     const auth = authFun(req);
-
     if(auth.failed)
         res.status(401).send()
 
@@ -77,12 +76,14 @@ router.post('/:id/file',upload.single('refpdf'),async (req,res) => {
 
     const dbs = await db.connect()
 
-    if(!await db.addPDF(dbs,id,fileName))
-        res.status(500)
+    if(!await db.addPDF(dbs,id,fileName)){
+        db.disconnect(dbs)
+        res.status(500).send()
+    }
 
     db.disconnect(dbs)
 
-    res.send()
+    res.status(201).send()
 })
 
 module.exports = router

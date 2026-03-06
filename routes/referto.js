@@ -42,7 +42,7 @@ router.get('/:id',auth,async (req,res) => {
 
     //GEtting URL for the PDF
     const s3c = s3.initializeClient()
-    out.result.refertoPdf = await s3.getObjectURL(s3c,out.result.refertoPdff);
+    out.refertoPdf = await s3.getObjectURL(s3c,out.refertoPdf);
 
     //Getting sample data if specified
     if(req.body && req.body.getSample)

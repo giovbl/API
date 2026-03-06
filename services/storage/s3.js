@@ -45,6 +45,8 @@ async function getObjectURL(client,objName) {
         return await getSignedUrl(client, command, { expiresIn: 3600 });
     }
     catch(err){
+        console.log(JSON.stringify(err))
+
         if(err instanceof S3ServiceException)
             throw err;
 

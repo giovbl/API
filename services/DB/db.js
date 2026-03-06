@@ -1,7 +1,7 @@
 const mariadb = require('mariadb');
 
 const {login, addSession, sessionExists} = require('./auth')
-const {addPatient, getPatient} = require('./patient')
+const {addPatient, getPatient, patientExists} = require('./patient')
 const {addSample, getSamples, getSample, setSampleStatus, setShipping} = require('./sample')
 const {addShipping, getShippings, getShipping, setShippingStatus} = require('./shipping')
 const {getFacility,getFacilities, getWorkgroup,getWorkgroups}  = require('./facility')
@@ -37,6 +37,7 @@ module.exports = {
     sessionExists,
     addPatient,
     getPatient,
+    patientExists,
     addSample,
     getSamples,
     getSample,

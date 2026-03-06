@@ -73,7 +73,26 @@ async function getPatient(conn,fiscalCode) {
     }
 }
 
+/**
+ * Checks if a patient exists
+ * @param {mariadb.Connection} conn DB connection
+ * @param {string} fiscalCode Patient's fiscal code
+ * @returns {boolean} If the user exists
+ */
+async function patientExists(conn,fiscalCode) {
+    try{
+        const res = await conn.query("SELECT fiscalCode FROM Patient WHERE fiscalCode=?",[fiscalCode])
+
+        return res.length > 0;
+    }
+    catch(error){
+        console.log(error)
+        return false;
+    }
+}
+
 module.exports = {
     addPatient,
-    getPatient
+    getPatient,
+    patientExists
 }

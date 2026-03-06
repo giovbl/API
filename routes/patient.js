@@ -15,13 +15,21 @@ router.post('/',auth,async (req,res) => {
 
     const dbs = await db.connect();
 
-    if(!await db.addPatient(dbs,req.body)) {
-        res.status(500)
+    if(await db.patientExists(dbs,req.body.fiscalCode)){
+        db.disconnect(dbs);
+        res.status(409).json({message:"Paziente già esistente"})
+        return;
+    }
+
+
+    if(!await db.addPatient(dbs,req.body)){
+        db.disconnect(dbs)
+        res.status(500).send()
     }
 
     db.disconnect(dbs);
 
-    res.send();
+    res.status(201).send();
 })
 
 /*

@@ -86,7 +86,7 @@ router.post('/register',async (req,res) => {
 
     if(db.userExists(dbs,req.body.email)){
         db.disconnect(dbs)
-        res.status(409).json({message:"User already exists"})
+        res.status(409).json({message:"Utente già esistente"})
         return;
     }
 

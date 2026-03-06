@@ -73,7 +73,7 @@ router.post('/',auth,async (req,res) => {
 })
 
 /*
-    Route for creating a shipping a sample with the specified courier
+    Route for shipping a sample with the specified courier
 */
 router.post('/:id/ship',auth,async (req,res) => {
 

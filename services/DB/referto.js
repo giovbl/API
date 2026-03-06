@@ -1,14 +1,14 @@
 
 const addRefertoEssentialsQuery = "INSERT INTO RefertoElegibile("+
                                   "isLabelEligible,isSampleElegible,"+
-                                  "result,ref_sample"+
-                                  ") VALUES(?,?,?,?) RETURNING id"
+                                  "ref_sample"+
+                                  ") VALUES(?,?,?) RETURNING id"
 
-const addRefertoLabelReasonQuery = "UPDATE RefertoElegibile"+
+const addRefertoLabelReasonQuery = "UPDATE RefertoElegibile "+
             "SET notElegibleReason = ?,otherNotElegibleReason = ? "+
             "WHERE id = ?"
 
-const addRefertoSampleElReasonQuery = "UPDATE RefertoElegibile"+
+const addRefertoSampleElReasonQuery = "UPDATE RefertoElegibile "+
                                 "SET reasonSampleNotElegible = ?"+
                                 "WHERE id = ?"
 
@@ -61,7 +61,7 @@ async function addReferto(conn,referto,result) {
         if(!referto.isLabelEligible){
             await conn.query(addRefertoLabelReasonQuery,[
                 referto.notElegibleReason,
-                referto.otherNotEligibleReason,
+                referto.otherNotElegibleReason,
                 refId
             ])
         }

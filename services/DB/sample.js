@@ -112,9 +112,30 @@ async function setSampleStatus(conn,id,status) {
     }
 }
 
+/**
+ * Assigns a shipping to 
+ * @param {mariadb.Connection} conn DB connection 
+ * @param {number} id Sample id 
+ * @param {string} status New status for the sample
+ * @returns {boolean} If the operation is successfull
+ */
+async function setShipping(conn,id,shippingId) {
+    try{
+        await conn.query("UPDATE Sample SET shipping = ? WHERE id = ?",
+                         [shippingId,id])
+
+        return true;
+    }
+    catch(error){
+        console.log(error)
+        return false;
+    }
+}
+
 module.exports = {
     addSample,
     getSamples,
     getSample,
-    setSampleStatus
+    setSampleStatus,
+    setShipping
 }

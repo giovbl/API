@@ -34,6 +34,9 @@ router.get('/',auth,async (req,res) => {
 
                 out[i].referto = await db.getRefertoId(dbs,out[i].id)
             }
+
+            if(out[i].shipping)
+                out[i].shipping = await db.getShipping(dbs,out[i].id)
         }
     }
 
@@ -65,7 +68,7 @@ router.post('/',auth,async (req,res) => {
 /*
     Route for creating a shipping a sample with the specified courier
 */
-router.get('/:id/ship',auth,async (req,res) => {
+router.post('/:id/ship',auth,async (req,res) => {
 
     const id = req.params.id;
 
@@ -74,7 +77,12 @@ router.get('/:id/ship',auth,async (req,res) => {
     
     const dbs = await db.connect();
 
-    if(!await db.addShipping(dbs,req.body)) 
+    const shippingId = await db.addShipping(dbs,req.body) 
+    
+    if(!shippingId)
+        res.status(500)
+
+    if(!await db.setShipping(dbs,id,shippingId))
         res.status(500)
 
     db.disconnect(dbs);

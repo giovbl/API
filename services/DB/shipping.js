@@ -1,7 +1,7 @@
 const addQuery = "INSERT INTO Shipping("+
                 "sender,recipient,"+
                 "taken_ext_date,del_date_ext,courier"+
-                ") VALUES (?,?,?,?,?)"
+                ") VALUES (?,?,?,?,?) RETURNING id"
 
 const getShippingsQuery = "SELECT id,"+
                         "d_status AS 'status',"+
@@ -10,25 +10,36 @@ const getShippingsQuery = "SELECT id,"+
                         "del_date_ext AS expectedDeliveryDate,"+
                         "taken_eff AS effectiveTakenDate,"+
                         "del_date_eff AS effectiveDeliveryDate "+
-                        "FROM Shipping WHERE courier = ?"
+                        "FROM Shipping WHERE courier = ? "
+
+const getShippingQuery = "SELECT id,"+
+                        "d_status AS 'status',"+
+                        "sender,recipient,"+
+                        "taken_ext_date AS expectedTakenDate,"+
+                        "del_date_ext AS expectedDeliveryDate,"+
+                        "taken_eff AS effectiveTakenDate,"+
+                        "del_date_eff AS effectiveDeliveryDate "+
+                        "FROM Shipping WHERE id = ? "
 
 /**
  * Adds shipping informations
  * @param {mariadb.Connection} conn DB connection
  * @param {Object} shipping Shipping data
- * @returns {boolean} If the operation is successfull
+ * @returns {number} The ID of the created shipping
  */
 async function addShipping(conn,shipping) {
 
     try{
-        await conn.query(addQuery,[
+
+        const rows = await conn.query(addQuery,[
             shipping.sender,
             shipping.recipient,
             new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
             new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
             shipping.courier
         ])
-        return true;
+
+        return rows[0].id;
     }
     catch(error){
         console.log(error)
@@ -48,6 +59,27 @@ async function getShippings(conn,id) {
         const res = await conn.query(getShippingsQuery,[id])
 
         return res;
+    }
+    catch(error){
+        console.log(error)
+        return null;
+    }
+}
+
+/**
+ * Gets data about a shipping
+ * @param {mariadb.Connection} conn DB connection
+ * @param {number} shippingId Shipping ID
+ * @returns {Object} The requested shipping
+ */
+async function getShipping(conn,shippingId) {
+    try{
+        const res = await conn.query(getShippingQuery,[shippingId])
+
+        if(!res)
+            return null;
+
+        return res[0];
     }
     catch(error){
         console.log(error)
@@ -86,6 +118,7 @@ async function setShippingStatus(conn,id,status) {
 
 module.exports = {
     addShipping,
+    getShipping,
     getShippings,
     setShippingStatus
 }

@@ -31,7 +31,7 @@ router.get('/',auth,async (req,res) => {
 /* 
     Route for updating the status of a shipping 
 */
-router.put('/:id/status',auth,async (req,res) => {
+router.patch('/:id/status',auth,async (req,res) => {
 
     if(!req.body)
         res.status(400).send()

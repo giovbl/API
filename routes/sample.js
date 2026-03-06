@@ -101,7 +101,7 @@ router.post('/:id/ship',auth,async (req,res) => {
 /*
     Route for modifying the sample status
 */
-router.put('/:id/status',auth,async (req,res) => {
+router.patch('/:id/status',auth,async (req,res) => {
 
     if(!req.body)
         res.status(400).send()

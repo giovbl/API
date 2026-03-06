@@ -55,9 +55,16 @@ router.post('/',auth,async (req,res) => {
     
     const dbs = await db.connect();
 
+    //Automatically deciding if it is necessary to use a courier
+    req.body.isCourierUsed = new Boolean(
+        await db.getWorkgroup(dbs,req.body.oncologiWorkgroup).facility 
+        === 
+        await db.getWorkgroup(dbs,req.body.analystWorkgroupWorkgroup).facility 
+    );
+
+    //Creating the sample with the informatios provided
     if(!await db.addSample(dbs,req.body)) 
         res.status(500)
-    
 
     db.disconnect(dbs);
 

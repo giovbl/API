@@ -37,12 +37,12 @@ router.get('/:id',auth,async (req,res) => {
     const out = await db.getReferto(dbs,id)
 
     //Getting Referto results if exists
-    if(out.result){
+    if(out.result)
         out.result = await db.getRefertoRes(dbs,out.result)
 
-        const s3c = s3.initializeClient()
-        out.result.file_pdf = await s3.getObjectURL(s3c,out.result.file_pdf);
-    }
+    //GEtting URL for the PDF
+    const s3c = s3.initializeClient()
+    out.result.refertoPdf = await s3.getObjectURL(s3c,out.result.refertoPdff);
 
     //Getting sample data if specified
     if(req.body && req.body.getSample)

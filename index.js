@@ -12,7 +12,6 @@ const shippingRouter = require('./routes/shipping')
 const refertoRouter = require('./routes/referto')
 const facilityRouter = require('./routes/facility')
 
-
 app.use(cors());
 app.use(express.json());
 app.use(cookieParser());

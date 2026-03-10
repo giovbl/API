@@ -80,13 +80,17 @@ async function getFacilities(conn) {
  * Gets all the workgroups of a facility (only analyst ones)
  * @param {mariadb.Connection} conn DB connection
  * @param {number} facilityId Facility ID
+ * @param {string} wgType Type of workgroup to show ('oncologo','analyst')
  * @returns {Array<Object>} The resulting workgroups
  */
-async function getWorkgroups(conn,facilityId) {
+async function getWorkgroups(conn,facilityId,wgType='all') {
     try{
         const res = await conn.query(getWorkgroupsQuery,[facilityId])
 
-        return res.filter((item)=> item.groupType === 'analyst');
+        if(wgType === 'all')
+            return res
+        else
+            return res.filter((item)=> item.groupType === wgType);
     }
     catch(error){
         console.log(error)

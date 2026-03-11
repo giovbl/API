@@ -88,7 +88,7 @@ async function userExists(conn,email) {
     try{
         const res = await conn.query("SELECT id FROM User WHERE email = ?",[email])
 
-        return res.lenght > 0;
+        return res.length > 0
     }
     catch(error){
         console.log(error)

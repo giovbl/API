@@ -84,10 +84,9 @@ router.post('/register',async (req,res) => {
         
     const dbs = await db.connect();
 
-    if(db.userExists(dbs,req.body.email)){
+    if(await db.userExists(dbs,req.body.email)){
         db.disconnect(dbs)
         res.status(409).json({message:"Utente già esistente"})
-        return;
     }
 
     const id = await db.addUser(dbs,req.body)

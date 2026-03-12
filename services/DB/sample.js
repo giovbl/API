@@ -16,7 +16,7 @@ const selectInitialQuery ="SELECT id,"+
                 "otherTissueSamplingMode,biopsyType,"+
                 "tissueProvenance,metaStaticSite,pctTumorCells,"+
                 "ageOfSample,isCourierUsed,pathologistNotes,"+
-                "patient,analysisStat,shipping,oncologiWorkgroup "+
+                "patient,analysisStat,shipping as 'shipment',oncologiWorkgroup "+
                 "FROM Sample "
 
 const getSamplesQuery = selectInitialQuery + "WHERE (analystWorkgroup = ?) OR (oncologiWorkgroup = ?)"

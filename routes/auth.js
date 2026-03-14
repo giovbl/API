@@ -33,7 +33,7 @@ router.post('/login',async (req,res) => {
 
     //Storing the refresh token of the new session
     res.cookie('refreshToken',createSession(db,dbs,dbres.id),{
-        path: '/auth/refresh',
+        path: 'auth/refresh',
         httpOnly:true,
         //secure: true,
         //sameSite: "none"
@@ -57,8 +57,8 @@ router.post('/login',async (req,res) => {
     Route for generating a new authentication token
 */
 router.post('/refresh',async (req,res) => {
-    const refreshCookie = req.cookies['refreshToken'];
-
+    const refreshCookie = req.cookies['refreshToken'];ù
+    
      //Token verification
     jwt.verify(refreshCookie, process.env.JWT_REFRESH_SECRET, async (err, user) => {
 

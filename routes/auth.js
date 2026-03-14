@@ -32,13 +32,23 @@ router.post('/login',async (req,res) => {
     }
 
     //Storing the refresh token of the new session
-    res.cookie('refreshToken',createSession(db,dbs,dbres.id),{httpOnly:true})
+    res.cookie('refreshToken',createSession(db,dbs,dbres.id),{
+        path: '/',
+        httpOnly:true,
+        //secure: true,
+        sameSite: "none"
+    })
 
     //DB connection no longer needed
     db.disconnect(dbs)
     
     //Generating and saving the auth token as http-only cookie
-    res.cookie('authToken',createAuthToken({id: dbres.id}),{httpOnly:true})
+    res.cookie('authToken',createAuthToken({id: dbres.id}),{
+        path: '/auth/refresh',
+        httpOnly:true,
+        //secure: true,
+        sameSite: "none"
+    })
     
     //Sending as response useful user infos
     res.json(dbres)

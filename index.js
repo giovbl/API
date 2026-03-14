@@ -2,6 +2,8 @@ const express = require('express');
 var cors = require('cors');
 const cookieParser = require('cookie-parser')
 
+require('dotenv').config()
+
 const port = 3000;
 const app = express();
 
@@ -14,7 +16,7 @@ const facilityRouter = require('./routes/facility')
 const userRouter = require('./routes/user')
 
 app.use(cors({ 
-  origin: 'http://localhost:5173',
+  origin: process.env.CORS_ORIGIN,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
@@ -33,4 +35,5 @@ app.use('/api/user',userRouter)
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
+  console.log(`CORS origin enabled for ${process.env.CORS_ORIGIN}`);
 });

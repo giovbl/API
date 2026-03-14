@@ -8,7 +8,7 @@ var {auth} = require('../utils/jwt_auth');
 /* 
     Route for getting all the facilities and related analyst workgroups
 */
-router.get('/',async (req,res) => {
+router.get('/',auth,async (req,res) => {
 
     const filter = req.query?.workgroupType
 

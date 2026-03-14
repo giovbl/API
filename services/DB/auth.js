@@ -5,15 +5,23 @@ const bcrypt = require('bcrypt')
  * @param {mariadb.Connection} conn DB connection
  * @param {string} email email for the authentication
  * @param {string} pwd user's password
- * @return {Object} User's useful data for permissions
+ * @return {Object} User's useful data for permissions and post login
  */
 async function login(conn,email,pwd) {
 
     try{
-        const rows = await conn.query("SELECT id,pwd,userType FROM User WHERE email= ?",[email])
+        const rows = await conn.query("SELECT id,pwd,userType,workgroup FROM User WHERE email= ?",[email])
 
-        if(rows.length > 0 && await bcrypt.compare(pwd,rows[0].pwd))
-            return {id:rows[0].id,type:rows[0].userType};
+        //If login is successfull
+        if(rows.length > 0 && await bcrypt.compare(pwd,rows[0].pwd)){
+
+            const reqConf = (rows[0].userType === 'Oncologo'|'Analista') && 
+                            (rows[0].workgroup == null);
+
+            return {id:rows[0].id,type:
+                    rows[0].userType,
+                    requiresConfig:reqConf};
+        }
 
         return null;
     }

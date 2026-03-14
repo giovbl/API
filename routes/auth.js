@@ -40,7 +40,7 @@ router.post('/login',async (req,res) => {
     res.cookie('authToken',createAuthToken({id: dbres.id}),{httpOnly:true})
     
     //Sending as response useful user infos
-    res.json({id: dbres.id, type: dbres.type})
+    res.json(dbres)
 })
 
 /*

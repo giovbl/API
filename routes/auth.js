@@ -27,7 +27,8 @@ router.post('/login',async (req,res) => {
 
     if(!dbres){
         db.disconnect(dbs);
-        res.status(401).send();
+        res.sendStatus(401);
+        return;
     }
 
     //Storing the refresh token of the new session

@@ -57,8 +57,8 @@ router.post('/login',async (req,res) => {
     Route for generating a new authentication token
 */
 router.post('/refresh',async (req,res) => {
-    const refreshCookie = req.cookies['refreshToken'];ù
-    
+    const refreshCookie = req.cookies['refreshToken'];
+
      //Token verification
     jwt.verify(refreshCookie, process.env.JWT_REFRESH_SECRET, async (err, user) => {
 

@@ -33,10 +33,10 @@ router.post('/login',async (req,res) => {
 
     //Storing the refresh token of the new session
     res.cookie('refreshToken',createSession(db,dbs,dbres.id),{
-        path: '/',
+        path: '/auth/refresh',
         httpOnly:true,
         //secure: true,
-        sameSite: "none"
+        //sameSite: "none"
     })
 
     //DB connection no longer needed
@@ -44,10 +44,9 @@ router.post('/login',async (req,res) => {
     
     //Generating and saving the auth token as http-only cookie
     res.cookie('authToken',createAuthToken({id: dbres.id}),{
-        path: '/auth/refresh',
         httpOnly:true,
         //secure: true,
-        sameSite: "none"
+        //sameSite: "none"
     })
     
     //Sending as response useful user infos

@@ -13,7 +13,12 @@ const refertoRouter = require('./routes/referto')
 const facilityRouter = require('./routes/facility')
 const userRouter = require('./routes/user')
 
-app.use(cors());
+app.use(cors({ 
+  origin: 'http://localhost:5173',
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+}));
 app.use(express.json());
 app.use(cookieParser());
 

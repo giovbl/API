@@ -11,6 +11,7 @@ const patientRouter = require('./routes/patient')
 const shipmentRouter = require('./routes/shipment')
 const refertoRouter = require('./routes/referto')
 const facilityRouter = require('./routes/facility')
+const userRouter = require('./routes/user')
 
 app.use(cors());
 app.use(express.json());
@@ -22,6 +23,7 @@ app.use('/api/patient',patientRouter);
 app.use('/api/shipping',shipmentRouter);
 app.use('/api/referto',refertoRouter)
 app.use('/api/facility',facilityRouter)
+app.use('/api/user',userRouter)
 
 
 app.listen(port, () => {

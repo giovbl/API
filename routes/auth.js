@@ -90,19 +90,15 @@ router.post('/register',async (req,res) => {
     }
 
     const id = await db.addUser(dbs,req.body)
+    
+    db.disconnect(dbs)
 
     if(!id)
         res.status(500)
+    else
+        res.status(201)
 
-    if(req.body.userType != "Corriere")
-        if(!await db.setUserWorkgroup(dbs,id,req.body.workgroup)){
-            db.disconnect(dbs)
-            res.status(500).send()
-        }
-
-    db.disconnect(dbs)
-
-    res.status(201).send()
+    res.send()
 })
 
 module.exports = router;

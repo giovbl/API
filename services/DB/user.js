@@ -4,6 +4,9 @@ const addUserQuery = "INSERT INTO User("+
                     "fullname,email,pwd,userType)"+
                     "VALUES(?,?,?,?) RETURNING id"
 
+const getUserQuery = "SELECT fullname,email,"+
+                     "userType,workgroup "+
+                     "FROM User WHERE id = ?"
 
 /**
  * Obtains the workgroup ID of an user's workgroup
@@ -97,9 +100,33 @@ async function userExists(conn,email) {
 
 }
 
+/**
+ * Gets data about the desired user
+ * @param {mariadb.Connection} conn DB connection 
+ * @param {string} id User ID
+ * @returns {Object} The requested user's data
+ */
+async function getUser(conn,id) {
+
+    try{
+        const res = await conn.query(getUserQuery,[id])
+
+        if(!res)
+            return null
+
+        return res[0]
+    }
+    catch(error){
+        console.log(error)
+        return null;
+    }
+
+}
+
 module.exports = {
     addUser,
     userExists,
     getUserWorkgroupID,
-    setUserWorkgroup
+    setUserWorkgroup,
+    getUser
 }

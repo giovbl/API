@@ -10,15 +10,18 @@ var {auth} = require('../utils/jwt_auth');
 */
 router.get('/',auth,async (req,res) => {
 
+    const analystWorkgroup = req.query?.analystWorkgroup
+    const oncologiWorkgroup = req.query?.oncologiWorkgroup
+
     const dbs = await db.connect()
     const out = await db.getSamples(dbs,await db.getUserWorkgroupID(dbs,req.user.id))
 
     //Adding requested workgroup data
-    if(req.body){
+    if(req.params){
 
         for (var i = 0; i < out.length; i++) {
 
-            if(req.body.analystWorkgroup){
+            if(analystWorkgroup){
 
                 out[i].analystWorkgroup = await db.getWorkgroup(dbs,out[i].analystWorkgroup)
 
@@ -26,7 +29,7 @@ router.get('/',auth,async (req,res) => {
                 out[i].analystWorkgroup.facility = {nome: fac.nome, id: fac.id}
             }
 
-            if(req.body.oncologiWorkgroup){
+            if(oncologiWorkgroup){
                 out[i].oncologiWorkgroup = await db.getWorkgroup(dbs,out[i].oncologiWorkgroup)
                 
                 const fac = await db.getFacility(dbs,out[i].oncologiWorkgroup.facility)

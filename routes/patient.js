@@ -33,9 +33,23 @@ router.post('/',auth,async (req,res) => {
 })
 
 /*
-    Route for getting the specified patient's data
+    Route for getting all patients
 */
 router.get('/',auth,async (req,res) => {
+
+    const dbs = await db.connect()
+
+    const dbres = await db.getPatients(dbs)
+
+    db.disconnect(dbs);
+
+    res.json(dbres);
+})
+
+/*
+    Route for getting the specified patient's data
+*/
+router.get('/:fiscalCode',auth,async (req,res) => {
 
     if(!req.body)
         res.status(400).send()

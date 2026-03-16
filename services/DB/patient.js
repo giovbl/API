@@ -22,6 +22,17 @@ const getQuery = "SELECT fiscalCode,isForeign,b_name AS 'name',surname,"+
     "allergies,previousTreatments "+
     "FROM Patient WHERE fiscalCode = ?";
 
+const getPatientsQuery = "SELECT fiscalCode,isForeign,b_name AS 'name',surname,"+
+    "birthDate,initials,gender,ethnicOrigin,otherEthnicOrigin,"+
+    "residenceRegion,residenceCity,residenceProvince,"+
+    "cap,r_address AS 'address',civicNumber,phone,privacyAndConditions,"+
+    "privacyPersonalData,diagnosis,neoplasia,familiarity,"+
+    "brcaSomaticTest,mutationResult,histology,otherHistology,"+
+    "isoTypeOtherDetails,hasReceivedSystemicTreatment,"+
+    "platinumSensitive,oncologistNotes,"+
+    "allergies,previousTreatments "+
+    "FROM Patient";
+
 /**
  * Creates a new patient
  * @param {mariadb.Connection} conn DB connection
@@ -54,8 +65,9 @@ async function addPatient(conn,patient) {
 }
 
 /**
- * Creates a new patient
+ * Gets data about a patient
  * @param {mariadb.Connection} conn DB connection
+ * @param {string} fiscalCode Fiscal code of the patient
  * @returns {Object} Patient data
  */
 async function getPatient(conn,fiscalCode) {
@@ -66,6 +78,26 @@ async function getPatient(conn,fiscalCode) {
             return {}
 
         return res[0];
+    }
+    catch(error){
+        console.log(error)
+        return null;
+    }
+}
+
+/**
+ * Gets all patients
+ * @param {mariadb.Connection} conn DB connection
+ * @returns {Object} Patient data
+ */
+async function getPatients(conn) {
+    try{
+        const res = await conn.query(getPatientsQuery)
+
+        if(!res)
+            return {}
+
+        return res;
     }
     catch(error){
         console.log(error)
@@ -94,5 +126,6 @@ async function patientExists(conn,fiscalCode) {
 module.exports = {
     addPatient,
     getPatient,
+    getPatients,
     patientExists
 }

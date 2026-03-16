@@ -27,7 +27,7 @@ app.use(cookieParser());
 app.use('/api/auth',authRouter);
 app.use('/api/sample',sampleRouter);
 app.use('/api/patient',patientRouter);
-app.use('/api/shipping',shipmentRouter);
+app.use('/api/shipment',shipmentRouter);
 app.use('/api/referto',refertoRouter)
 app.use('/api/facility',facilityRouter)
 app.use('/api/user',userRouter)

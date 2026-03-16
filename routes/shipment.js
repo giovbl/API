@@ -17,11 +17,18 @@ router.get('/',auth,async (req,res) => {
     
     const dbres = await db.getShippings(dbs,userId)
 
-    //Adding essential infos on sender and recipient
+    /*
+    Adding:
+        - data about the sender
+        - data about the recipient
+        - ID of the sample being shipped
+    */
     for (var i = 0; i < dbres.length; i++) {
         dbres[i].sender = await db.getFacility(dbs,dbres[i].sender)
         dbres[i].recipient = await db.getFacility(dbs,dbres[i].recipient)
+        dbres[i].sample = await db.getShipmentSampleId(dbs,dbres[i].id)
     }
+
 
     db.disconnect(dbs);
 

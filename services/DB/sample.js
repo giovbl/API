@@ -132,10 +132,26 @@ async function setShipping(conn,id,shippingId) {
     }
 }
 
+async function getShipmentSampleId(conn,shipmentId){
+    try{
+        const res = await conn.query("SELECT id FROM Sample WHERE shipping=?",[shipmentId])
+
+        if(!res)
+            return null
+
+        return res[0].id;
+    }
+    catch(error){
+        console.log(error)
+        return null;
+    }
+}
+
 module.exports = {
     addSample,
     getSamples,
     getSample,
     setSampleStatus,
-    setShipping
+    setShipping,
+    getShipmentSampleId
 }

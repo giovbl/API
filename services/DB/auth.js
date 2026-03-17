@@ -15,8 +15,10 @@ async function login(conn,email,pwd) {
         //If login is successfull
         if(rows.length > 0 && await bcrypt.compare(pwd,rows[0].pwd)){
 
-            const reqConf = (rows[0].userType === 'Oncologo'|'Analista') && 
+            const reqConf = (rows[0].userType != 'Corriere') && 
                             (rows[0].workgroup == null);
+
+            console.log(reqConf, rows[0])
 
             return {id:rows[0].id,type:
                     rows[0].userType,

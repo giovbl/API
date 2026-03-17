@@ -124,6 +124,8 @@ router.patch('/:id/status',auth,async (req,res) => {
         return;
     }
 
+    await db.disconnect(dbs);
+
     res.sendStatus(204)
 })
 

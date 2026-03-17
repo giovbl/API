@@ -43,7 +43,7 @@ router.get('/',auth,async (req,res) => {
         }
     }
 
-    db.disconnect(dbs)
+    await db.disconnect(dbs)
     
     res.json(out)
 })
@@ -67,11 +67,12 @@ router.post('/',auth,async (req,res) => {
 
     //Creating the sample with the informations provided
     if(!await db.addSample(dbs,req.body)){ 
-        db.disconnect(dbs)
+        await db.disconnect(dbs)
         res.status(500).send()
+        return;
     }
 
-    db.disconnect(dbs);
+    await db.disconnect(dbs);
 
     res.status(201).send();
 })
@@ -96,7 +97,7 @@ router.post('/:id/ship',auth,async (req,res) => {
     if(!await db.setShipping(dbs,id,shippingId))
         res.status(500)
 
-    db.disconnect(dbs);
+    await db.disconnect(dbs);
 
     res.send();
 })
@@ -118,8 +119,9 @@ router.patch('/:id/status',auth,async (req,res) => {
     const dbs = await db.connect();
 
     if(!await db.setSampleStatus(dbs,id,status)){
-        db.disconnect(dbs);
+        await db.disconnect(dbs);
         res.status(500).send()
+        return;
     }
 
     res.sendStatus(204)

@@ -25,8 +25,8 @@ async function connect(){
  * Closes a DB session
  * @param {mariadb.Connection} conn DB session
  */
-function disconnect(conn) {
-    conn.release();
+async function disconnect(conn) {
+    await conn.release();
 }
 
 module.exports = {

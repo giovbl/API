@@ -26,7 +26,7 @@ router.post('/login',async (req,res) => {
     const dbres = await db.login(dbs,req.body.email,req.body.pwd);
 
     if(!dbres){
-        db.disconnect(dbs);
+        await db.disconnect(dbs);
         res.sendStatus(401);
         return;
     }
@@ -40,7 +40,7 @@ router.post('/login',async (req,res) => {
     })
 
     //DB connection no longer needed
-    db.disconnect(dbs)
+    await db.disconnect(dbs)
     
     //Generating and saving the auth token as http-only cookie
     res.cookie('authToken',createAuthToken({id: dbres.id}),{
@@ -66,16 +66,15 @@ router.post('/refresh',async (req,res) => {
             return res.sendStatus(401)
 
 
-        //Verifying if a session with this token exists
         const dbs = await db.connect()
-        if(!await db.sessionExists(dbs,refreshCookie)){
-            
-            db.disconnect(dbs)
 
+        //Verifying if a session with this token exists
+        if(!await db.sessionExists(dbs,refreshCookie)){        
+            await db.disconnect(dbs)
             return res.sendStatus(401)
         }
 
-        db.disconnect(dbs)
+        await db.disconnect(dbs)
 
         //Generating and saving the auth token as http-only cookie
         res.cookie('authToken',createAuthToken(user),{httpOnly:true})
@@ -95,13 +94,13 @@ router.post('/register',async (req,res) => {
     const dbs = await db.connect();
 
     if(await db.userExists(dbs,req.body.email)){
-        db.disconnect(dbs)
+        await db.disconnect(dbs)
         res.status(409).json({message:"Utente già esistente"})
     }
 
     const id = await db.addUser(dbs,req.body)
     
-    db.disconnect(dbs)
+    await db.disconnect(dbs)
 
     if(!id)
         res.status(500)

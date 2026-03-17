@@ -22,6 +22,8 @@ router.post('/',auth,async (req,res) => {
     if(!await db.addReferto(dbs,req.body.referto,req.body.result))
         res.status(500)
 
+    await db.disconnect(dbs)
+
     res.send()
 })
 
@@ -48,7 +50,7 @@ router.get('/:id',auth,async (req,res) => {
     if(req.body && req.body.getSample)
         out.sample = await db.getSample(dbs,out.sample)
 
-    db.disconnect(dbs)
+    await db.disconnect(dbs)
     
     res.json(out)
 })
@@ -77,11 +79,11 @@ router.post('/:id/file',upload.single('refpdf'),async (req,res) => {
     const dbs = await db.connect()
 
     if(!await db.addPDF(dbs,id,fileName)){
-        db.disconnect(dbs)
+        await db.disconnect(dbs)
         res.status(500).send()
     }
 
-    db.disconnect(dbs)
+    await db.disconnect(dbs)
 
     res.status(201).send()
 })

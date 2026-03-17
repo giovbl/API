@@ -14,8 +14,11 @@ router.get('/',auth,async (req,res) => {
     //Getting user data
     const user = await db.getUser(dbs,req.user.id)
 
-    if(!user)
+    if(!user){
+        await db.disconnect(dbs)
         res.sendStatus(500)
+        return;
+    }
 
     //Getting user's workgroup info
     if(user.workgroup){
@@ -25,7 +28,7 @@ router.get('/',auth,async (req,res) => {
         user.workgroup.facility = await db.getFacility(dbs,user.workgroup.facility)
     }
 
-    db.disconnect(dbs)
+    await db.disconnect(dbs)
     
     res.json(user)
 
@@ -44,7 +47,7 @@ router.patch('/workgroup',auth,async (req,res) => {
     const ops = await db.setUserWorkgroup(dbs,req.user.id,
                                           req.body.workgroup)
 
-    db.disconnect(dbs)
+    await db.disconnect(dbs)
 
     if(!ops)
         res.sendStatus(500)

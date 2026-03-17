@@ -21,6 +21,8 @@ router.get('/',auth,async (req,res) => {
         else
             out[i].workgroups = await db.getWorkgroups(dbs,out[i].id)
 
+    await db.disconnect(dbs)
+
     res.json(out)
 
 })

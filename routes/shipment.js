@@ -30,7 +30,7 @@ router.get('/',auth,async (req,res) => {
     }
 
 
-    db.disconnect(dbs);
+    await db.disconnect(dbs);
 
     res.json(dbres);
 })
@@ -52,11 +52,12 @@ router.patch('/:id/status',auth,async (req,res) => {
     const dbs = await db.connect();
 
     if(!await db.setShippingStatus(dbs,shippingId,status)){
-        db.disconnect(dbs)
+        await db.disconnect(dbs)
         res.status(500).send()
+        return;
     }
 
-    db.disconnect(dbs);
+    await db.disconnect(dbs);
 
     res.sendStatus(204);
 })

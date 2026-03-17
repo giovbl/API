@@ -4,7 +4,7 @@ var router = express.Router();
 var db = require('../services/DB/db');
 
 var {auth} = require('../utils/jwt_auth');
-const { sampleSchema } = require('../utils/validator');
+const { sampleSchema,sampleStatusSchema } = require('../utils/validator');
 
 /*
     Route for getting samples data for a specified user id

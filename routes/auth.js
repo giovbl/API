@@ -4,6 +4,7 @@ var jwt = require('jsonwebtoken');
 
 var db = require('../services/DB/db');
 var {auth,createSession, createAuthToken} = require('../utils/jwt_auth');
+const { loginSchema, registerSchema } = require('../utils/validator');
 
 require('dotenv').config();
 
@@ -18,6 +19,19 @@ router.get('/',auth,(req,res) => {
     Route used for logging in a user
 */
 router.post('/login',async (req,res) => {
+
+    if(!req.body){
+        res.sendStatus(400)
+        return
+    }
+
+    //Body data validation
+    const {error} = loginSchema.validate(req.body)
+    if(error){
+        res.json(error).status(400)
+        return
+    }
+    
 
     //Initializing a connection to the DB
     const dbs = await db.connect();
@@ -65,7 +79,6 @@ router.post('/refresh',async (req,res) => {
         if(err)
             return res.sendStatus(401)
 
-
         const dbs = await db.connect()
 
         //Verifying if a session with this token exists
@@ -88,14 +101,25 @@ router.post('/refresh',async (req,res) => {
 */
 router.post('/register',async (req,res) => {
    
-    if(!req.body)
-        res.status(400).send()
+    if(!req.body){
+        res.sendStatus(400)
+        return
+    }
+
+    //Body data validation
+    const {error} = registerSchema.validate(req.body)
+    if(error){
+        res.json(error).status(400)
+        return;
+    }
+    
         
     const dbs = await db.connect();
 
     if(await db.userExists(dbs,req.body.email)){
         await db.disconnect(dbs)
         res.status(409).json({message:"Utente già esistente"})
+        return
     }
 
     const id = await db.addUser(dbs,req.body)
@@ -103,11 +127,9 @@ router.post('/register',async (req,res) => {
     await db.disconnect(dbs)
 
     if(!id)
-        res.status(500)
+        res.sendStatus(500)
     else
-        res.status(201)
-
-    res.send()
+        res.sendStatus(201)
 })
 
 module.exports = router;

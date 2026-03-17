@@ -4,6 +4,7 @@ var router = express.Router();
 var db = require('../services/DB/db');
 
 var {auth} = require('../utils/jwt_auth');
+const { sampleSchema } = require('../utils/validator');
 
 /*
     Route for getting samples data for a specified user id
@@ -55,6 +56,13 @@ router.post('/',auth,async (req,res) => {
 
     if(!req.body)
         res.status(400).send()
+
+    //Body validation
+    const {error} = sampleSchema.validate(req.body)
+    if(error){
+        res.json(err).status(400)
+        return
+    }
     
     const dbs = await db.connect();
 
@@ -84,8 +92,17 @@ router.post('/:id/ship',auth,async (req,res) => {
 
     const id = req.params.id;
 
-    if(!req.body)
-        res.status(400).send()
+    if(!req.body){
+        res.sendStatus(400)
+        return;
+    }
+
+    //Body validation
+    const {error} = shipSampleSchema.validate(req.body)
+    if(error){
+        res.json(error).status(400)
+        return;
+    }
     
     const dbs = await db.connect();
 
@@ -106,19 +123,23 @@ router.post('/:id/ship',auth,async (req,res) => {
     Route for modifying the sample status
 */
 router.patch('/:id/status',auth,async (req,res) => {
-
-    if(!req.body)
-        res.status(400).send()
-
     const id = req.params.id
-    const status = req.body.status
 
-    if(!status)
-        res.status(400).send()
+    if(!req.body){
+        res.seandStatus(400)
+        return;
+    }
+    
+    const {error} = sampleStatusSchema.validate(req.body)
+
+    if(error){
+        res.json(error).status(400)
+        return;
+    }
     
     const dbs = await db.connect();
 
-    if(!await db.setSampleStatus(dbs,id,status)){
+    if(!await db.setSampleStatus(dbs,id,req.body.status)){
         await db.disconnect(dbs);
         res.status(500).send()
         return;

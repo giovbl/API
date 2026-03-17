@@ -9,13 +9,23 @@ var db = require('../services/DB/db');
 var s3 = require('../services/storage/s3')
 
 var {auth,authFun} = require('../utils/jwt_auth');
+const { refertoSchema } = require('../utils/validator');
 
 /*
     Route for creating a referto
 */
 router.post('/',auth,async (req,res) => {
-    if(!req.body)
-        res.status(400).send()
+    if(!req.body){
+        res.sendStatus(400)
+        return
+    }
+
+    //Body validation
+    const {error} = refertoSchema.validate(req.body)
+    if(error){
+        res.json(error).status(400)
+        return
+    }
 
     const dbs = await db.connect()
 
@@ -24,7 +34,7 @@ router.post('/',auth,async (req,res) => {
 
     await db.disconnect(dbs)
 
-    res.send()
+    res.sendStatus(201);
 })
 
 /*

@@ -3,6 +3,7 @@ var router = express.Router();
 
 var db = require('../services/DB/db');
 var {auth} = require('../utils/jwt_auth');
+const { userWorkgroupSchema } = require('../utils/validator');
 
 /*
     Route for getting current user infos
@@ -31,7 +32,6 @@ router.get('/',auth,async (req,res) => {
     await db.disconnect(dbs)
     
     res.json(user)
-
 })
 
 /*
@@ -39,8 +39,13 @@ router.get('/',auth,async (req,res) => {
 */
 router.patch('/workgroup',auth,async (req,res) => {
 
-    if(!req.body || !req.body.workgroup)
+    if(!req.body)
         res.sendStatus(400)
+
+    const {error} = userWorkgroupSchema.validate(req.body)
+
+    if(error)
+        res.status(400).json(error).send()
 
     const dbs = await db.connect()
 

@@ -4,6 +4,7 @@ var router = express.Router();
 var db = require('../services/DB/db');
 
 var {auth} = require('../utils/jwt_auth');
+const { shipmentStatusSchema } = require('../utils/validator');
 
 /*
     Route for getting shippings assigned to
@@ -39,19 +40,19 @@ router.get('/',auth,async (req,res) => {
     Route for updating the status of a shipping 
 */
 router.patch('/:id/status',auth,async (req,res) => {
+    const shippingId = req.params.id
 
     if(!req.body)
         res.status(400).send()
 
-    const shippingId = req.params.id
-    const status = req.body.status
+    const {error} = shipmentStatusSchema.validate(req.body)
 
-    if(!status)
-        res.status(400).send()
+    if(error)
+        res.status(400).json(error).send()
     
     const dbs = await db.connect();
 
-    if(!await db.setShippingStatus(dbs,shippingId,status)){
+    if(!await db.setShippingStatus(dbs,shippingId,req.body.status)){
         await db.disconnect(dbs)
         res.status(500).send()
         return;

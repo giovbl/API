@@ -3,6 +3,7 @@ var router = express.Router();
 
 var db = require('../services/DB/db');
 
+var {patientSchema} = require('../utils/validator')
 var {auth} = require('../utils/jwt_auth');
 
 /*
@@ -10,8 +11,17 @@ var {auth} = require('../utils/jwt_auth');
 */
 router.post('/',auth,async (req,res) => {
     
-    if(!req.body)
-        res.status(400).send()
+    if(!req.body){
+        res.sendStatus(400)
+        return;
+    }
+
+    //Body validation
+    const {error} = patientSchema.validate(req.body)
+    if(error){
+        res.json(error).status(400)
+        return;
+    }
 
     const dbs = await db.connect();
 

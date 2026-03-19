@@ -40,13 +40,13 @@ const patientSchema = Joi.object({
 	brcaSomaticTest: Joi.boolean().required(),
 	mutationResult: Joi.string().regex(/Positive|Negative|Indeterminate/).required(),
 	histology: Joi.string().required(),
-	otherHistology: Joi.string().required(),
-	isoTypeOtherDetails: Joi.string().required(),
+	otherHistology: Joi.string().allow(""),
+	isoTypeOtherDetails: Joi.string().allow(""),
 	hasReceivedSystemicTreatment: Joi.boolean().required(),
 	platinumSensitive: Joi.boolean().required(),
-	oncologistNotes: Joi.string(),
-	allergies: Joi.string(),
-	previousTreatments: Joi.string()
+	oncologistNotes: Joi.string().allow(""),
+	allergies: Joi.string().allow(""),
+	previousTreatments: Joi.string().allow("")
 });
 
 //Schema for /sample

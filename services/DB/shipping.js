@@ -1,3 +1,5 @@
+const conn = require('./config')
+
 const addQuery = "INSERT INTO Shipping("+
                 "sender,recipient,"+
                 "taken_ext_date,del_date_ext,courier"+
@@ -23,11 +25,10 @@ const getShippingQuery = "SELECT id,"+
 
 /**
  * Adds shipping informations
- * @param {mariadb.Connection} conn DB connection
  * @param {Object} shipping Shipping data
  * @returns {number} The ID of the created shipping
  */
-async function addShipping(conn,shipping) {
+async function addShipping(shipping) {
 
     try{
 
@@ -50,11 +51,10 @@ async function addShipping(conn,shipping) {
 
 /**
  * Gets all the shippings for the specified courier
- * @param {mariadb.Connection} conn DB connection
  * @param {number} id Courier ID
  * @returns {Array<Object>} Array of shippings
  */
-async function getShippings(conn,id) {
+async function getShippings(id) {
     try{
         const res = await conn.query(getShippingsQuery,[id])
 
@@ -68,11 +68,10 @@ async function getShippings(conn,id) {
 
 /**
  * Gets data about a shipping
- * @param {mariadb.Connection} conn DB connection
  * @param {number} shippingId Shipping ID
  * @returns {Object} The requested shipping
  */
-async function getShipping(conn,shippingId) {
+async function getShipping(shippingId) {
     try{
         const res = await conn.query(getShippingQuery,[shippingId])
 
@@ -89,12 +88,11 @@ async function getShipping(conn,shippingId) {
 
 /**
  * Sets a new status for a shipping
- * @param {mariadb.Connection} conn DB connection
  * @param {number} id Shipping ID
  * @param {string} status New status
  * @returns {boolean} If the operation is successfull
  */
-async function setShippingStatus(conn,id,status) {
+async function setShippingStatus(id,status) {
 
     try{
         await conn.query("UPDATE Shipping SET d_status = ? WHERE id = ?",

@@ -1,3 +1,4 @@
+const conn = require('./config')
 
 const getWorkgroupPartialQuery = "SELECT id,groupName,groupType,facility "
 
@@ -18,11 +19,10 @@ const getFacilitiesQuery = getFacilityPartialQuery + "FROM Facility"
 
 /**
  * Gets data about the specified workgroup
- * @param {mariadb.Connection} conn DB connection
  * @param {number} id Workgroup ID
  * @returns {Object} The requested Workgroup
  */
-async function getWorkgroup(conn,id) {
+async function getWorkgroup(id) {
     try{
         const res = await conn.query(getWorkgroupQuery,[id])
 
@@ -39,11 +39,10 @@ async function getWorkgroup(conn,id) {
 
 /**
  * Gets data about the specified facility
- * @param {mariadb.Connection} conn DB connection
  * @param {number} id Facility ID
  * @returns {Object} The specified facility
  */
-async function getFacility(conn,id) {
+async function getFacility(id) {
     try{
         const res = await conn.query(getFacilityQuery,[id])
 
@@ -60,11 +59,10 @@ async function getFacility(conn,id) {
 
 /**
  * Gets all the avaliable facilities
- * @param {mariadb.Connection} conn DB connection
  * @param {number} id Facility ID
  * @returns {Object} The specified facility
  */
-async function getFacilities(conn) {
+async function getFacilities() {
     try{
         const res = await conn.query(getFacilitiesQuery)
 
@@ -78,12 +76,11 @@ async function getFacilities(conn) {
 
 /**
  * Gets all the workgroups of a facility (only analyst ones)
- * @param {mariadb.Connection} conn DB connection
  * @param {number} facilityId Facility ID
  * @param {string} wgType Type of workgroup to show ('oncologo','analyst')
  * @returns {Array<Object>} The resulting workgroups
  */
-async function getWorkgroups(conn,facilityId,wgType='all') {
+async function getWorkgroups(facilityId,wgType='all') {
     try{
         const res = await conn.query(getWorkgroupsQuery,[facilityId])
 

@@ -1,3 +1,4 @@
+const conn = require('./config')
 
 const addRefertoEssentialsQuery = "INSERT INTO RefertoElegibile("+
                                   "isLabelEligible,isSampleElegible,"+
@@ -45,12 +46,11 @@ const getRefertoResQuery = "SELECT "+
 
 /**
  * Creates a referto
- * @param {mariadb.Connection} conn DB connection
  * @param {Object} referto Elegibility data about the referto
  * @param {Object} result Results about the referto
  * @returns {boolean} If the operation is successfull
  */
-async function addReferto(conn,referto,result) {
+async function addReferto(referto,result) {
     try{
         const refId = await conn.query(addRefertoEssentialsQuery,[
             referto.isLabelEligible,
@@ -100,11 +100,10 @@ async function addReferto(conn,referto,result) {
 
 /**
  * Gets data about a referto
- * @param {mariadb.Connection} conn DB connection
  * @param {number} id Referto ID
  * @returns {Object} The requested referto
  */
-async function getReferto(conn,id) {
+async function getReferto(id) {
 
     try{
         const res = await conn.query(getRefertoQuery,[id])
@@ -123,11 +122,10 @@ async function getReferto(conn,id) {
 
 /**
  * Gets results about a referto
- * @param {mariadb.Connection} conn DB connection
  * @param {number} id Referto Results ID
  * @returns {Object} The requested referto results
  */
-async function getRefertoRes(conn,id) {
+async function getRefertoRes(id) {
 
     try{
         const res = await conn.query(getRefertoResQuery,[id])
@@ -146,11 +144,10 @@ async function getRefertoRes(conn,id) {
 
 /**
  * Adds PDF reference to a referto's result
- * @param {mariadb.Connection} conn DB connection
  * @param {number} refertoId Referto ID
  * @param {string} fileName PDF reference
  */
-async function addPDF(conn,refertoId,fileName) {
+async function addPDF(refertoId,fileName) {
     try{
         await conn.query(addPDFQuery,
                          [fileName,refertoId])
@@ -165,11 +162,10 @@ async function addPDF(conn,refertoId,fileName) {
 
 /**
  * Gets the id of the referto associated to the sample
- * @param {mariadb.Connection} conn DB connection
  * @param {*} sampleId Sample ID
  * @returns The id of the referto
  */
-async function getRefertoId(conn,sampleId) {
+async function getRefertoId(sampleId) {
     try{
         const res = await conn.query("SELECT id FROM RefertoElegibile WHERE ref_sample = ?",
                                     [sampleId])

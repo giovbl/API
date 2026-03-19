@@ -12,16 +12,14 @@ router.get('/',auth,async (req,res) => {
 
     const filter = req.query?.workgroupType
 
-    const dbs = await db.connect()
     const out = await db.getFacilities(dbs)
 
     for(var i = 0; i < out.length; i++)
         if(filter != undefined)
-            out[i].workgroups = await db.getWorkgroups(dbs,out[i].id,filter)
+            out[i].workgroups = await db.getWorkgroups(out[i].id,filter)
         else
-            out[i].workgroups = await db.getWorkgroups(dbs,out[i].id)
+            out[i].workgroups = await db.getWorkgroups(out[i].id)
 
-    await db.disconnect(dbs)
 
     res.json(out)
 

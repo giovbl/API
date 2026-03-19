@@ -27,12 +27,10 @@ router.post('/',auth,async (req,res) => {
         return
     }
 
-    const dbs = await db.connect()
 
-    if(!await db.addReferto(dbs,req.body.referto,req.body.result))
+    if(!await db.addReferto(req.body.referto,req.body.result))
         res.status(500)
 
-    await db.disconnect(dbs)
 
     res.sendStatus(201);
 })
@@ -44,13 +42,12 @@ router.get('/:id',auth,async (req,res) => {
 
     const id = req.params.id
 
-    const dbs = await db.connect()
 
-    const out = await db.getReferto(dbs,id)
+    const out = await db.getReferto(id)
 
     //Getting Referto results if exists
     if(out.result)
-        out.result = await db.getRefertoRes(dbs,out.result)
+        out.result = await db.getRefertoRes(out.result)
 
     //GEtting URL for the PDF
     const s3c = s3.initializeClient()
@@ -58,9 +55,7 @@ router.get('/:id',auth,async (req,res) => {
 
     //Getting sample data if specified
     if(req.body && req.body.getSample)
-        out.sample = await db.getSample(dbs,out.sample)
-
-    await db.disconnect(dbs)
+        out.sample = await db.getSample(out.sample)
     
     res.json(out)
 })
@@ -86,14 +81,9 @@ router.post('/:id/file',upload.single('refpdf'),async (req,res) => {
     if(!fileName)
         res.status(500).send()
 
-    const dbs = await db.connect()
-
-    if(!await db.addPDF(dbs,id,fileName)){
-        await db.disconnect(dbs)
+    if(!await db.addPDF(id,fileName)){
         res.status(500).send()
     }
-
-    await db.disconnect(dbs)
 
     res.status(201).send()
 })

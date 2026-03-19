@@ -1,5 +1,3 @@
-const mariadb = require('mariadb');
-
 const {login, addSession, sessionExists} = require('./auth')
 const {addPatient, getPatient, patientExists, getPatients} = require('./patient')
 const {addSample, getSamples, getSample, setSampleStatus, setShipping, getShipmentSampleId} = require('./sample')
@@ -8,30 +6,7 @@ const {getFacility,getFacilities, getWorkgroup,getWorkgroups}  = require('./faci
 const {addReferto, getReferto, getRefertoRes,getRefertoId,addPDF} = require('./referto')
 const {getUserWorkgroupID, setUserWorkgroup, addUser, userExists, getUser} = require('./user')
 
-/**
- * Creates a DB session
- * @returns {mariadb.Connection} the created session
- */
-async function connect(){
-    return await mariadb.createPool({
-        host: process.env.MARIADB_HOST,
-        user: process.env.MARIADB_USER,
-        database: process.env.MARIADB_DB,
-        password: process.env.MARIADB_USER_PWD
-    }).getConnection();
-}
-
-/**
- * Closes a DB session
- * @param {mariadb.Connection} conn DB session
- */
-async function disconnect(conn) {
-    await conn.release();
-}
-
 module.exports = {
-    connect,
-    disconnect,
     login,
     addSession,
     sessionExists,

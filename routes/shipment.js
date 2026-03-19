@@ -13,10 +13,8 @@ const { shipmentStatusSchema } = require('../utils/validator');
 router.get('/',auth,async (req,res) => {
     
     const userId = req.user.id;
-
-    const dbs = await db.connect()
     
-    const dbres = await db.getShippings(dbs,userId)
+    const dbres = await db.getShippings(userId)
 
     /*
     Adding:
@@ -25,13 +23,10 @@ router.get('/',auth,async (req,res) => {
         - ID of the sample being shipped
     */
     for (var i = 0; i < dbres.length; i++) {
-        dbres[i].sender = await db.getFacility(dbs,dbres[i].sender)
-        dbres[i].recipient = await db.getFacility(dbs,dbres[i].recipient)
-        dbres[i].sample = await db.getShipmentSampleId(dbs,dbres[i].id)
+        dbres[i].sender = await db.getFacility(dbres[i].sender)
+        dbres[i].recipient = await db.getFacility(dbres[i].recipient)
+        dbres[i].sample = await db.getShipmentSampleId(dbres[i].id)
     }
-
-
-    await db.disconnect(dbs);
 
     res.json(dbres);
 })
@@ -49,16 +44,12 @@ router.patch('/:id/status',auth,async (req,res) => {
 
     if(error)
         res.status(400).json(error)
-    
-    const dbs = await db.connect();
 
-    if(!await db.setShippingStatus(dbs,shippingId,req.body.status)){
-        await db.disconnect(dbs)
+
+    if(!await db.setShippingStatus(shippingId,req.body.status)){
         res.status(500).send()
         return;
     }
-
-    await db.disconnect(dbs);
 
     res.sendStatus(204);
 })

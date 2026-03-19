@@ -1,3 +1,4 @@
+const conn = require('./config')
 const bcrypt = require('bcrypt')
 
 const addUserQuery = "INSERT INTO User("+
@@ -10,11 +11,10 @@ const getUserQuery = "SELECT fullname,email,"+
 
 /**
  * Obtains the workgroup ID of an user's workgroup
- * @param {mariadb.Connection} conn DB connection
  * @param {number} id User ID
  * @returns The id of the user's workgroup
  */
-async function getUserWorkgroupID(conn,id) {
+async function getUserWorkgroupID(id) {
 
     try{
         const res = await conn.query("SELECT workgroup FROM User WHERE id = ?",[id])
@@ -33,11 +33,10 @@ async function getUserWorkgroupID(conn,id) {
 
 /**
  * Adds a new user
- * @param {mariadb.Connection} conn DB connection
  * @param {Object} user Data of the user to create
  * @returns {boolean} If the operation is successfull
  */
-async function addUser(conn,user) {
+async function addUser(user) {
 
     try{
         const res = await conn.query(addUserQuery,[
@@ -60,12 +59,11 @@ async function addUser(conn,user) {
 
 /**
  * Adds an user to a workgroup
- * @param {mariadb.Connection} conn DB connection
  * @param {number} id User ID
  * @param {number} workgroupId Workgroup ID
  * @returns {boolean} If the operation is successfull
  */
-async function setUserWorkgroup(conn,id,workgroupId) {
+async function setUserWorkgroup(id,workgroupId) {
 
     try{
         await conn.query("UPDATE User SET workgroup = ? WHERE id = ?",
@@ -82,11 +80,10 @@ async function setUserWorkgroup(conn,id,workgroupId) {
 
 /**
  * Verifies if an user exists
- * @param {mariadb.Connection} conn DB connection 
  * @param {string} email Email related to the user
  * @returns {boolean} If the user exists
  */
-async function userExists(conn,email) {
+async function userExists(email) {
 
     try{
         const res = await conn.query("SELECT id FROM User WHERE email = ?",[email])
@@ -102,11 +99,10 @@ async function userExists(conn,email) {
 
 /**
  * Gets data about the desired user
- * @param {mariadb.Connection} conn DB connection 
  * @param {string} id User ID
  * @returns {Object} The requested user's data
  */
-async function getUser(conn,id) {
+async function getUser(id) {
 
     try{
         const res = await conn.query(getUserQuery,[id])

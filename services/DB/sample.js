@@ -1,4 +1,4 @@
-const mariadb = require('mariadb');
+const conn = require('./config')
 
 const addQuery = "INSERT INTO Sample("+
     "analystWorkgroup,typeOfBiologicalMaterial,"+
@@ -26,11 +26,10 @@ const getSampleQuery = selectInitialQuery + "WHERE id = ?"
     
 /**
  * Adds a new sample
- * @param {mariadb.Connection} conn DB connection
  * @param {Object} sample Sample data
  * @returns {boolean} If the operation is successfull
  */
-async function addSample(conn,sample)
+async function addSample(sample)
 {
     try{
         await conn.query(addQuery,[
@@ -54,11 +53,10 @@ async function addSample(conn,sample)
 
 /**
  * Gets all the samples created/assigned by a workgroup
- * @param {mariadb.Connection} conn DB connection
  * @param {number} workgroupId Workgroup ID
  * @returns {Array<Object>} The resulting samples
  */
-async function getSamples(conn,workgroupId) {
+async function getSamples(workgroupId) {
     try{
         const res = await conn.query(getSamplesQuery,
                                     [workgroupId,workgroupId])
@@ -73,11 +71,10 @@ async function getSamples(conn,workgroupId) {
 
 /**
  * Gets all the samples created/assigned by a workgroup
- * @param {mariadb.Connection} conn DB connection
  * @param {number} id Sample ID
  * @returns {Object} The resulting sample
  */
-async function getSample(conn,id) {
+async function getSample(id) {
     try{
         const res = await conn.query(getSampleQuery,[id])
 
@@ -94,12 +91,11 @@ async function getSample(conn,id) {
 
 /**
  * Updates the sample status
- * @param {mariadb.Connection} conn DB connection 
  * @param {number} id Sample id 
  * @param {string} status New status for the sample
  * @returns {boolean} If the operation is successfull
  */
-async function setSampleStatus(conn,id,status) {
+async function setSampleStatus(id,status) {
     try{
         await conn.query("UPDATE Sample SET analysisStat = ? WHERE id = ?",
                          [status,id])
@@ -114,12 +110,11 @@ async function setSampleStatus(conn,id,status) {
 
 /**
  * Assigns a shipping to 
- * @param {mariadb.Connection} conn DB connection 
  * @param {number} id Sample id 
  * @param {string} status New status for the sample
  * @returns {boolean} If the operation is successfull
  */
-async function setShipping(conn,id,shippingId) {
+async function setShipping(id,shippingId) {
     try{
         await conn.query("UPDATE Sample SET shipping = ? WHERE id = ?",
                          [shippingId,id])
@@ -132,7 +127,7 @@ async function setShipping(conn,id,shippingId) {
     }
 }
 
-async function getShipmentSampleId(conn,shipmentId){
+async function getShipmentSampleId(shipmentId){
     try{
         const res = await conn.query("SELECT id FROM Sample WHERE shipping=?",[shipmentId])
 

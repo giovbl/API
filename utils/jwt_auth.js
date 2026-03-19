@@ -51,7 +51,7 @@ async function authFun(req){
  * @param {number} userId User's id
  * @returns {string} The generated token for the new session
  */
-function createSession(db,dbs,userId){
+function createSession(db,userId){
 
     //Generting the refresh token
     const refresh = jwt.sign({id: userId},
@@ -59,7 +59,7 @@ function createSession(db,dbs,userId){
                            {expiresIn: "30d"});
 
     //Creating a new session on the DB
-    db.addSession(dbs,refresh,userId);
+    db.addSession(refresh,userId);
 
     return refresh;
 }

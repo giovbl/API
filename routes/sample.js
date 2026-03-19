@@ -14,8 +14,7 @@ router.get('/',auth,async (req,res) => {
     const analystWorkgroup = req.query?.analystWorkgroup
     const oncologiWorkgroup = req.query?.oncologiWorkgroup
 
-    const dbs = await db.connect()
-    const out = await db.getSamples(dbs,await db.getUserWorkgroupID(dbs,req.user.id))
+    const out = await db.getSamples(await db.getUserWorkgroupID(req.user.id))
 
     //Adding requested workgroup data
     if(req.params){
@@ -24,28 +23,26 @@ router.get('/',auth,async (req,res) => {
 
             if(analystWorkgroup){
 
-                out[i].analystWorkgroup = await db.getWorkgroup(dbs,out[i].analystWorkgroup)
+                out[i].analystWorkgroup = await db.getWorkgroup(out[i].analystWorkgroup)
 
-                const fac = await db.getFacility(dbs,out[i].analystWorkgroup.facility);
+                const fac = await db.getFacility(out[i].analystWorkgroup.facility);
                 out[i].analystWorkgroup.facility = {nome: fac.nome, id: fac.id}
             }
 
             if(oncologiWorkgroup){
-                out[i].oncologiWorkgroup = await db.getWorkgroup(dbs,out[i].oncologiWorkgroup)
+                out[i].oncologiWorkgroup = await db.getWorkgroup(out[i].oncologiWorkgroup)
                 
-                const fac = await db.getFacility(dbs,out[i].oncologiWorkgroup.facility)
+                const fac = await db.getFacility(out[i].oncologiWorkgroup.facility)
                 out[i].oncologiWorkgroup.facility = {nome: fac.nome, id: fac.id}
 
-                out[i].referto = await db.getRefertoId(dbs,out[i].id)
+                out[i].referto = await db.getRefertoId(out[i].id)
             }
 
             if(out[i].shipment)
-                out[i].shipment = await db.getShipping(dbs,out[i].id)
+                out[i].shipment = await db.getShipping(out[i].id)
         }
     }
 
-    await db.disconnect(dbs)
-    
     res.json(out)
 })
 
@@ -64,23 +61,23 @@ router.post('/',auth,async (req,res) => {
         return
     }
     
-    const dbs = await db.connect();
+    
 
     //Automatically deciding if it is necessary to use a courier
     req.body.isCourierUsed = new Boolean(
-        await db.getWorkgroup(dbs,req.body.oncologiWorkgroup).facility 
+        await db.getWorkgroup(req.body.oncologiWorkgroup).facility 
         === 
-        await db.getWorkgroup(dbs,req.body.analystWorkgroupWorkgroup).facility 
+        await db.getWorkgroup(req.body.analystWorkgroupWorkgroup).facility 
     );
 
     //Creating the sample with the informations provided
-    if(!await db.addSample(dbs,req.body)){ 
-        await db.disconnect(dbs)
+    if(!await db.addSample(req.body)){ 
+        
         res.status(500).send()
         return;
     }
 
-    await db.disconnect(dbs);
+    
 
     res.status(201).send();
 })
@@ -104,17 +101,16 @@ router.post('/:id/ship',auth,async (req,res) => {
         return;
     }
     
-    const dbs = await db.connect();
+    
 
-    const shippingId = await db.addShipping(dbs,req.body) 
+    const shippingId = await db.addShipping(req.body) 
     
     if(!shippingId)
         res.status(500)
 
-    if(!await db.setShipping(dbs,id,shippingId))
+    if(!await db.setShipping(id,shippingId))
         res.status(500)
 
-    await db.disconnect(dbs);
 
     res.send();
 })
@@ -137,15 +133,12 @@ router.patch('/:id/status',auth,async (req,res) => {
         return;
     }
     
-    const dbs = await db.connect();
 
-    if(!await db.setSampleStatus(dbs,id,req.body.status)){
-        await db.disconnect(dbs);
+    if(!await db.setSampleStatus(id,req.body.status)){
+        
         res.status(500).send()
         return;
     }
-
-    await db.disconnect(dbs);
 
     res.sendStatus(204)
 })

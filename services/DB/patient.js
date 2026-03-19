@@ -1,4 +1,4 @@
-const mariadb = require('mariadb');
+const conn = require('./config')
 
 const addQuery = "INSERT INTO Patient (fiscalCode,isForeign,b_name,surname,"+
     "birthDate,initials,gender,ethnicOrigin,otherEthnicOrigin,"+
@@ -35,11 +35,10 @@ const getPatientsQuery = "SELECT fiscalCode,isForeign,b_name AS 'name',surname,"
 
 /**
  * Creates a new patient
- * @param {mariadb.Connection} conn DB connection
  * @param {Object} patient Patient data
  * @returns {boolean} If the operation is successfull
  */
-async function addPatient(conn,patient) {
+async function addPatient(patient) {
 
     try{
         await conn.query(addQuery,[
@@ -66,11 +65,10 @@ async function addPatient(conn,patient) {
 
 /**
  * Gets data about a patient
- * @param {mariadb.Connection} conn DB connection
  * @param {string} fiscalCode Fiscal code of the patient
  * @returns {Object} Patient data
  */
-async function getPatient(conn,fiscalCode) {
+async function getPatient(fiscalCode) {
     try{
         const res = await conn.query(getQuery,[fiscalCode])
 
@@ -87,10 +85,9 @@ async function getPatient(conn,fiscalCode) {
 
 /**
  * Gets all patients
- * @param {mariadb.Connection} conn DB connection
  * @returns {Object} Patient data
  */
-async function getPatients(conn) {
+async function getPatients() {
     try{
         const res = await conn.query(getPatientsQuery)
 
@@ -107,11 +104,10 @@ async function getPatients(conn) {
 
 /**
  * Checks if a patient exists
- * @param {mariadb.Connection} conn DB connection
  * @param {string} fiscalCode Patient's fiscal code
  * @returns {boolean} If the user exists
  */
-async function patientExists(conn,fiscalCode) {
+async function patientExists(fiscalCode) {
     try{
         const res = await conn.query("SELECT fiscalCode FROM Patient WHERE fiscalCode=?",[fiscalCode])
 

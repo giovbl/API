@@ -31,30 +31,23 @@ router.post('/login',async (req,res) => {
         res.status(400).json(error)
         return
     }
-    
-
-    //Initializing a connection to the DB
-    const dbs = await db.connect();
 
     //Credentials verification
-    const dbres = await db.login(dbs,req.body.email,req.body.pwd);
+    const dbres = await db.login(req.body.email,req.body.pwd);
 
     if(!dbres){
-        await db.disconnect(dbs);
+        
         res.sendStatus(401);
         return;
     }
 
     //Storing the refresh token of the new session
-    res.cookie('refreshToken',createSession(db,dbs,dbres.id),{
+    res.cookie('refreshToken',createSession(db,dbres.id),{
         path: 'auth/refresh',
         httpOnly:true,
         //secure: true,
         //sameSite: "none"
     })
-
-    //DB connection no longer needed
-    await db.disconnect(dbs)
     
     //Generating and saving the auth token as http-only cookie
     res.cookie('authToken',createAuthToken({id: dbres.id}),{

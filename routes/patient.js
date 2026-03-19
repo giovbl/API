@@ -23,22 +23,17 @@ router.post('/',auth,async (req,res) => {
         return;
     }
 
-    const dbs = await db.connect();
-
-    if(await db.patientExists(dbs,req.body.fiscalCode)){
-        await db.disconnect(dbs);
+    //Verifying if the patient already exists
+    if(await db.patientExists(req.body.fiscalCode)){
         res.status(409).json({message:"Paziente già esistente"})
         return;
     }
 
-
-    if(!await db.addPatient(dbs,req.body)){
-        await db.disconnect(dbs)
+    //Creating the new patient
+    if(!await db.addPatient(req.body)){
         res.status(500).send()
         return;
     }
-
-    await db.disconnect(dbs);
 
     res.status(201).send();
 })
@@ -48,11 +43,7 @@ router.post('/',auth,async (req,res) => {
 */
 router.get('/',auth,async (req,res) => {
 
-    const dbs = await db.connect()
-
-    const dbres = await db.getPatients(dbs)
-
-    await db.disconnect(dbs);
+    const dbres = await db.getPatients()
 
     res.json(dbres);
 })
@@ -67,11 +58,7 @@ router.get('/:fiscalCode',auth,async (req,res) => {
     if(!fiscalCode)
         res.status(400).send() 
 
-    const dbs = await db.connect()
-
-    const dbres = await db.getPatient(dbs,fiscalCode)
-
-    await db.disconnect(dbs);
+    const dbres = await db.getPatient(fiscalCode)
 
     res.json(dbres);
 })

@@ -65,7 +65,7 @@ router.get('/:fiscalCode',auth,async (req,res) => {
     if(!req.body)
         res.status(400).send()
 
-    const fiscalCode = req.body.fiscalCode
+    const fiscalCode = req.params.fiscalCode
 
     if(!fiscalCode)
         res.status(400).send() 

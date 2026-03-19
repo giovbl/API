@@ -60,7 +60,7 @@ router.post('/',auth,async (req,res) => {
     //Body validation
     const {error} = sampleSchema.validate(req.body)
     if(error){
-        res.json(err).status(400)
+        res.status(400).json(error)
         return
     }
     
@@ -100,7 +100,7 @@ router.post('/:id/ship',auth,async (req,res) => {
     //Body validation
     const {error} = shipSampleSchema.validate(req.body)
     if(error){
-        res.json(error).status(400)
+        res.status(400).json(error)
         return;
     }
     
@@ -133,7 +133,7 @@ router.patch('/:id/status',auth,async (req,res) => {
     const {error} = sampleStatusSchema.validate(req.body)
 
     if(error){
-        res.json(error).status(400)
+        res.status(400).json(error)
         return;
     }
     

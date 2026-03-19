@@ -19,7 +19,7 @@ router.post('/',auth,async (req,res) => {
     //Body validation
     const {error} = patientSchema.validate(req.body)
     if(error){
-        res.json(error).status(400)
+        res.status(400).json(error)
         return;
     }
 

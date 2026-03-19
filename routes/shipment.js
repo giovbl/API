@@ -48,7 +48,7 @@ router.patch('/:id/status',auth,async (req,res) => {
     const {error} = shipmentStatusSchema.validate(req.body)
 
     if(error)
-        res.status(400).json(error).send()
+        res.status(400).json(error)
     
     const dbs = await db.connect();
 

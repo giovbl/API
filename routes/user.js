@@ -39,13 +39,17 @@ router.get('/',auth,async (req,res) => {
 */
 router.patch('/workgroup',auth,async (req,res) => {
 
-    if(!req.body)
+    if(!req.body){
         res.sendStatus(400)
+        return
+    }
 
+    //Body validation
     const {error} = userWorkgroupSchema.validate(req.body)
-
-    if(error)
-        res.status(400).json(error).send()
+    if(error){
+        res.status(400).json(error)
+        return
+    }
 
     const dbs = await db.connect()
 

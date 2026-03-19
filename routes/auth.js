@@ -28,7 +28,7 @@ router.post('/login',async (req,res) => {
     //Body data validation
     const {error} = loginSchema.validate(req.body)
     if(error){
-        res.json(error).status(400)
+        res.status(400).json(error)
         return
     }
     
@@ -109,7 +109,7 @@ router.post('/register',async (req,res) => {
     //Body data validation
     const {error} = registerSchema.validate(req.body)
     if(error){
-        res.json(error).status(400)
+        res.status(400).json(error)
         return;
     }
     

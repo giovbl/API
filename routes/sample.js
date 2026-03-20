@@ -83,6 +83,22 @@ router.post('/',auth,async (req,res) => {
 })
 
 /*
+    Route for getting data about a sample
+*/
+router.get('/:id',auth,async (req,res) => {
+
+    const id = req.params.id;
+
+    const dbres = await db.getSample(id)
+
+    if(!dbres)
+        res.sendStatus(404)
+
+    res.json(dbres)
+
+})
+
+/*
     Route for shipping a sample with the specified courier
 */
 router.post('/:id/ship',auth,async (req,res) => {

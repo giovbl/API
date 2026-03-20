@@ -77,7 +77,7 @@ async function getSamples(workgroupId) {
 async function getSample(id) {
     try{
         const res = await conn.query(getSampleQuery,[id])
-
+        
         if(!res)
             return {}
 

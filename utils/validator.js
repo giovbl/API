@@ -52,22 +52,20 @@ const patientSchema = Joi.object({
 //Schema for /sample
 const sampleSchema = Joi.object({
     analystWorkgroup: Joi.number().required(),
-    typeOfBiologicalMaterial: Joi.string().regex(/Tissue|Blood|Other/).required(),
+    typeofBiologicalMaterial: Joi.string().regex(/Tissue|Blood|Other/).required(),
     exhaustedBiologicalMaterial: Joi.boolean().required(),
     histologicalNumber: Joi.string().required(),
-    tissuePreservationMode: Joi.string().regex(/Formalin|Frozen|Paraffin/).required(),
-    tissueSamplingMode: Joi.string().regex(/Biopsy|Surgery|Cytology/),
-    otherTissueSamplingMode: Joi.string(),
-    biopsyType: Joi.string().regex(/Core|FineNeedle|Incisional|Excisional/).required(),
-    tissueProvenance: Joi.string(),
-    metaStaticSite: Joi.string(),
+    tissuePreservationMode: Joi.string().regex(/Formalin|Frozen|Paraffin/).allow(null),
+    tissueSamplingMode: Joi.string().regex(/Biopsy|Surgery|Cytology/).allow(null),
+    otherTissueSamplingMode: Joi.string().allow(null),
+    biopsyType: Joi.string().regex(/Core|FineNeedle|Incisional|Excisional/).allow(null),
+    tissueProvenance: Joi.string().allow(null),
+    metaStaticSite: Joi.string().allow(null),
     pctTumorCells: Joi.number().min(0).max(100).required(), /*% cellule tumorali*/
-    ageOfSample: Joi.number().min(0),
-    pathologistNotes: Joi.string(),
+    ageOfSample: Joi.number().min(0).required(),
+    pathologistNotes: Joi.string().allow(""),
     patient: Joi.string().required(),
-    analysisStat: Joi.string().regex(/unanalyzed|analyzing|completed/).required(),
-    shipping: Joi.number(),
-    oncologiWorkgroup: Joi.number(),
+    oncologiWorkgroup: Joi.number().required()
 })
 
 //Schema for sample/:id/status

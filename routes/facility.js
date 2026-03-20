@@ -12,7 +12,7 @@ router.get('/',auth,async (req,res) => {
 
     const filter = req.query?.workgroupType
 
-    const out = await db.getFacilities(dbs)
+    const out = await db.getFacilities()
 
     for(var i = 0; i < out.length; i++)
         if(filter != undefined)

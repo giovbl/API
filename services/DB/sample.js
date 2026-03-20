@@ -6,8 +6,8 @@ const addQuery = "INSERT INTO Sample("+
     "tissuePreservationMode,tissueSamplingMode,"+
     "otherTissueSamplingMode,biopsyType,tissueProvenance,"+
     "metaStaticSite,pctTumorCells,ageOfSample,isCourierUsed,"+
-    "pathologistNotes,patient,analysisStat,oncologiWorkgroup"+
-    ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+    "pathologistNotes,patient,oncologiWorkgroup"+
+    ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 
 const selectInitialQuery ="SELECT id,"+
                 "analystWorkgroup,typeOfBiologicalMaterial,"+
@@ -38,8 +38,8 @@ async function addSample(sample)
             sample.tissuePreservationMode,sample.tissueSamplingMode,
             sample.otherTissueSamplingMode,sample.biopsyType,
             sample.tissueProvenance,sample.metaStaticSite,
-            sample.pctTumorCells,sample.ageOfSample,sample.isCourierUsed,
-            sample.pathologistNotes,sample.patient,sample.analysisStat,
+            sample.pctTumorCells,sample.ageOfSample,(sample.isCourierUsed?1:0),
+            sample.pathologistNotes,sample.patient,
             sample.oncologiWorkgroup
         ])
 

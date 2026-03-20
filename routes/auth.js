@@ -72,15 +72,10 @@ router.post('/refresh',async (req,res) => {
         if(err)
             return res.sendStatus(401)
 
-        const dbs = await db.connect()
-
         //Verifying if a session with this token exists
-        if(!await db.sessionExists(dbs,refreshCookie)){        
-            await db.disconnect(dbs)
+        if(!await db.sessionExists(refreshCookie)){        
             return res.sendStatus(401)
         }
-
-        await db.disconnect(dbs)
 
         //Generating and saving the auth token as http-only cookie
         res.cookie('authToken',createAuthToken(user),{httpOnly:true})
@@ -109,15 +104,12 @@ router.post('/register',async (req,res) => {
         
     const dbs = await db.connect();
 
-    if(await db.userExists(dbs,req.body.email)){
-        await db.disconnect(dbs)
+    if(await db.userExists(req.body.email)){
         res.status(409).json({message:"Utente già esistente"})
         return
     }
 
-    const id = await db.addUser(dbs,req.body)
-    
-    await db.disconnect(dbs)
+    const id = await db.addUser(req.body)
 
     if(!id)
         res.sendStatus(500)

@@ -10,6 +10,12 @@ var {auth} = require('../utils/jwt_auth');
     Route for creating a patient
 */
 router.post('/',auth,async (req,res) => {
+
+    //Verifying if the user has the required permissions
+    if(req.user.userType != 'Oncologo'){
+        res.sendStatus(403)
+        return
+    }
     
     if(!req.body){
         res.sendStatus(400)

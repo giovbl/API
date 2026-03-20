@@ -51,6 +51,12 @@ router.get('/',auth,async (req,res) => {
 */
 router.post('/',auth,async (req,res) => {
 
+    //Verifying if the user has the required permissions
+    if(req.user.userType != 'Oncologo'){
+        res.sendStatus(403)
+        return
+    }
+
     if(!req.body)
         res.status(400).send()
 
@@ -87,6 +93,13 @@ router.post('/',auth,async (req,res) => {
 */
 router.get('/:id',auth,async (req,res) => {
 
+    //Verifying if the user has the required permissions
+    if(req.user.userType != 'Oncologo' && 
+       req.user.userType != 'Analista'){
+        res.sendStatus(403)
+        return
+    }
+
     const id = req.params.id;
 
     const dbres = await db.getSample(id)
@@ -102,8 +115,13 @@ router.get('/:id',auth,async (req,res) => {
     Route for shipping a sample with the specified courier
 */
 router.post('/:id/ship',auth,async (req,res) => {
-
     const id = req.params.id;
+
+    //Verifying if the user has the required permissions
+    if(req.user.userType != 'Oncologo'){
+        res.sendStatus(403)
+        return
+    }
 
     if(!req.body){
         res.sendStatus(400)
@@ -136,6 +154,12 @@ router.post('/:id/ship',auth,async (req,res) => {
 */
 router.patch('/:id/status',auth,async (req,res) => {
     const id = req.params.id
+
+    //Verifying if the user has the required permissions
+    if(req.user.userType != 'Analista'){
+        res.sendStatus(403)
+        return
+    }
 
     if(!req.body){
         res.seandStatus(400)

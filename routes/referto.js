@@ -15,6 +15,13 @@ const { refertoSchema } = require('../utils/validator');
     Route for creating a referto
 */
 router.post('/',auth,async (req,res) => {
+
+    //Verifying if the user has the required permissions
+    if(req.user.userType != 'Analista'){
+        res.sendStatus(403)
+        return
+    }
+
     if(!req.body){
         res.sendStatus(400)
         return
@@ -40,6 +47,13 @@ router.post('/',auth,async (req,res) => {
 */
 router.get('/:id',auth,async (req,res) => {
 
+    //Verifying if the user has the required permissions
+    if(req.user.userType != 'Oncologo' && 
+       req.user.userType != 'Analista'){
+        res.sendStatus(403)
+        return
+    }
+
     const id = req.params.id
 
 
@@ -64,13 +78,18 @@ router.get('/:id',auth,async (req,res) => {
     Route for uploading the PDF file of a referto
 */
 router.post('/:id/file',upload.single('refpdf'),async (req,res) => {
-
     const id = req.params.id
 
     //Authentication
     const auth = authFun(req);
     if(auth.failed)
         res.status(401).send()
+
+    //Verifying if the user has the required permissions
+    if(req.user.userType != 'Analista'){
+        res.sendStatus(403)
+        return
+    }
 
     if(!req.body)
         res.status(400).send()

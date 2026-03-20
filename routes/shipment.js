@@ -7,10 +7,16 @@ var {auth} = require('../utils/jwt_auth');
 const { shipmentStatusSchema } = require('../utils/validator');
 
 /*
-    Route for getting shippings assigned to
+    Route for getting shipments assigned to
     the courier requesting the data
 */
 router.get('/',auth,async (req,res) => {
+
+    //Verifying if the user has the required permissions
+    if(req.user.userType != 'Corriere'){
+        res.sendStatus(403)
+        return
+    }
     
     const userId = req.user.id;
     
@@ -37,11 +43,17 @@ router.get('/',auth,async (req,res) => {
 router.patch('/:id/status',auth,async (req,res) => {
     const shippingId = req.params.id
 
+    //Verifying if the user has the required permissions
+    if(req.user.userType != 'Corriere'){
+        res.sendStatus(403)
+        return
+    }
+
     if(!req.body)
         res.status(400).send()
 
+    //Body validation
     const {error} = shipmentStatusSchema.validate(req.body)
-
     if(error)
         res.status(400).json(error)
 

@@ -55,10 +55,12 @@ router.get('/:fiscalCode',auth,async (req,res) => {
 
     const fiscalCode = req.params.fiscalCode
 
-    if(!fiscalCode)
-        res.status(400).send() 
-
     const dbres = await db.getPatient(fiscalCode)
+
+    if(!dbres){
+        res.sendStatus(404)
+        return;
+    }
 
     res.json(dbres);
 })

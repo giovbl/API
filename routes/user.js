@@ -14,7 +14,6 @@ router.get('/',auth,async (req,res) => {
     const user = await db.getUser(req.user.id)
 
     if(!user){
-        await db.disconnect(dbs)
         res.sendStatus(500)
         return;
     }

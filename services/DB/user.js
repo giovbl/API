@@ -5,7 +5,7 @@ const addUserQuery = "INSERT INTO User("+
                     "fullname,email,pwd,userType)"+
                     "VALUES(?,?,?,?) RETURNING id"
 
-const getUserQuery = "SELECT fullname,email,"+
+const getUserQuery = "SELECT id,fullname,email,"+
                      "userType,workgroup "+
                      "FROM User WHERE id = ?"
 

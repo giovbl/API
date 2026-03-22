@@ -11,6 +11,8 @@ const { sampleSchema,sampleStatusSchema } = require('../utils/validator');
 */
 router.get('/',auth,async (req,res) => {
 
+
+
     const analystWorkgroup = req.query?.analystWorkgroup
     const oncologiWorkgroup = req.query?.oncologiWorkgroup
 
@@ -94,7 +96,8 @@ router.post('/',auth,async (req,res) => {
 router.get('/:id',auth,async (req,res) => {
 
     //Verifying if the user has the required permissions
-    if(req.user.userType != 'Oncologo' && 
+    console.log(req.user)
+    if(req.user.userType != 'Oncologo' &&
        req.user.userType != 'Analista'){
         res.sendStatus(403)
         return

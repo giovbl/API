@@ -50,7 +50,7 @@ router.post('/login',async (req,res) => {
     })
     
     //Generating and saving the auth token as http-only cookie
-    res.cookie('authToken',createAuthToken({id: dbres.id}),{
+    res.cookie('authToken',createAuthToken({id:dbres.id,userType:dbres.type}),{
         httpOnly:true,
         //secure: true,
         //sameSite: "none"
@@ -78,7 +78,11 @@ router.post('/refresh',async (req,res) => {
         }
 
         //Generating and saving the auth token as http-only cookie
-        res.cookie('authToken',createAuthToken(user),{httpOnly:true})
+        res.cookie('authToken',createAuthToken(await db.getUser(user.id)),{
+            httpOnly:true,
+            //secure: true,
+            //sameSite: "none"
+        })
 
         res.send();
     })

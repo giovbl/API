@@ -70,7 +70,7 @@ function createSession(db,userId){
  * @returns {string} The generated token
  */
 function createAuthToken(user) {
-    return jwt.sign({id: user.id},
+    return jwt.sign({id: user.id, userType: user.userType},
                     process.env.JWT_AUTH_SECRET,
                     {expiresIn: "15m"});
 }

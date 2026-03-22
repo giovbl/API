@@ -96,7 +96,6 @@ router.post('/',auth,async (req,res) => {
 router.get('/:id',auth,async (req,res) => {
 
     //Verifying if the user has the required permissions
-    console.log(req.user)
     if(req.user.userType != 'Oncologo' &&
        req.user.userType != 'Analista'){
         res.sendStatus(403)

@@ -18,8 +18,6 @@ async function login(email,pwd) {
             const reqConf = (rows[0].userType != 'Corriere') && 
                             (rows[0].workgroup == null);
 
-            console.log(reqConf, rows[0])
-
             return {id:rows[0].id,type:
                     rows[0].userType,
                     requiresConfig:reqConf};

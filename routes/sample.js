@@ -74,7 +74,7 @@ router.post('/',auth,async (req,res) => {
     //Automatically deciding if it is necessary to use a courier
     req.body.isCourierUsed = new Boolean(
         await db.getWorkgroup(req.body.oncologiWorkgroup).facility 
-        === 
+        != 
         await db.getWorkgroup(req.body.analystWorkgroupWorkgroup).facility 
     );
 

@@ -30,6 +30,17 @@ router.get('/',auth,async (req,res) => {
 })
 
 /*
+    Route for getting all available couriers
+*/
+router.get('/courier',auth,async (req,res) => {
+
+    //Getting couriers
+    const couriers = await db.getCouriers()
+    
+    res.json(couriers)
+})
+
+/*
     Route for modifying current user's workgroup
 */
 router.patch('/workgroup',auth,async (req,res) => {

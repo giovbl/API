@@ -5,9 +5,12 @@ const addUserQuery = "INSERT INTO User("+
                     "fullname,email,pwd,userType)"+
                     "VALUES(?,?,?,?) RETURNING id"
 
-const getUserQuery = "SELECT id,fullname,email,"+
-                     "userType,workgroup "+
-                     "FROM User WHERE id = ?"
+const getUserBase = "SELECT id,fullname,email,"+
+                     "userType,workgroup "
+
+const getUserQuery = getUserBase + "FROM User WHERE id = ?"
+
+const getCouriersQuery = getUserBase + "FROM User WHERE userType = 'Corriere'"
 
 /**
  * Obtains the workgroup ID of an user's workgroup
@@ -119,10 +122,29 @@ async function getUser(id) {
 
 }
 
+/**
+ * Gets all available users of type 'Corriere'
+ * @returns {Array<Object>} The avaliable couriers
+ */
+async function getCouriers() {
+
+    try{
+        const res = await conn.query(getCouriersQuery)
+
+        return res
+    }
+    catch(error){
+        console.log(error)
+        return null;
+    }
+
+}
+
 module.exports = {
     addUser,
     userExists,
     getUserWorkgroupID,
     setUserWorkgroup,
-    getUser
+    getUser,
+    getCouriers
 }

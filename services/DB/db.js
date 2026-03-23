@@ -4,7 +4,7 @@ const {addSample, getSamples, getSample, setSampleStatus, setShipping, getShipme
 const {addShipping, getShippings, getShipping, setShippingStatus} = require('./shipping')
 const {getFacility,getFacilities, getWorkgroup,getWorkgroups}  = require('./facility')
 const {addReferto, getReferto, getRefertoRes,getRefertoId,addPDF} = require('./referto')
-const {getUserWorkgroupID, setUserWorkgroup, addUser, userExists, getUser} = require('./user')
+const {getUserWorkgroupID, setUserWorkgroup, addUser, userExists, getUser, getCouriers} = require('./user')
 
 module.exports = {
     login,
@@ -35,6 +35,7 @@ module.exports = {
     addPDF,
     addUser,
     getUser,
+    getCouriers,
     userExists,
     setUserWorkgroup,
     getUserWorkgroupID

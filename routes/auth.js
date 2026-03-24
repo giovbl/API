@@ -105,9 +105,7 @@ router.post('/register',async (req,res) => {
         return;
     }
     
-        
-    const dbs = await db.connect();
-
+    //Verifying if the user already exists
     if(await db.userExists(req.body.email)){
         res.status(409).json({message:"Utente già esistente"})
         return

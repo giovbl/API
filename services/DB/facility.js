@@ -15,6 +15,10 @@ const getFacilityQuery = getFacilityPartialQuery +
                         "FROM Facility WHERE id = ?"
 
 const getFacilitiesQuery = getFacilityPartialQuery + "FROM Facility"
+
+const getFacilityWorkgroupQuery = getFacilityPartialQuery + 
+                                "FROM Facility WHERE id = ("+
+                                "SELECT facility FROM WorkGroup WHERE id = ?)"
                         
 
 /**
@@ -75,6 +79,26 @@ async function getFacilities() {
 }
 
 /**
+ * Gets the facility of the specified workgroup
+ * @param {number} workgroupId Workgroup ID
+ * @returns {Object} The resulting facility
+ */
+async function getFacilityFromWorkgroup(workgroupId) {
+    try{
+        const res = await conn.query(getFacilityWorkgroupQuery,[workgroupId])
+
+        if(!res)
+            return {}
+
+        return res[0];
+    }
+    catch(error){
+        console.log(error)
+        return null;
+    }
+}
+
+/**
  * Gets all the workgroups of a facility (only analyst ones)
  * @param {number} facilityId Facility ID
  * @param {string} wgType Type of workgroup to show ('oncologo','analyst')
@@ -98,6 +122,7 @@ async function getWorkgroups(facilityId,wgType='all') {
 module.exports = {
     getFacility,
     getFacilities,
+    getFacilityFromWorkgroup,
     getWorkgroup,
     getWorkgroups
 }

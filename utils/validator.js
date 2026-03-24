@@ -73,6 +73,12 @@ const sampleStatusSchema = Joi.object({
 	status: Joi.string().regex(/unanalyzed|analyzing|completed/).required()
 })
 
+const shipSampleSchema = Joi.object({
+	courier: Joi.number().min(0).required(),
+	sample: Joi.number().min(0).required(),
+	expectedTakenDate: Joi.date().required()
+})
+
 //Schema for shipment/:id/status
 const shipmentStatusSchema = Joi.object({
 	status: Joi.string().regex(/received|taken|in transit|arrived/).required()
@@ -124,6 +130,7 @@ module.exports = {
     patientSchema,
     sampleSchema,
 	sampleStatusSchema,
+	shipSampleSchema,
 	shipmentStatusSchema,
 	userWorkgroupSchema,
 	refertoSchema

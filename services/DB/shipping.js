@@ -35,7 +35,7 @@ async function addShipping(shipping) {
         const rows = await conn.query(addQuery,[
             shipping.sender,
             shipping.recipient,
-            new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
+            new Date(shipping.expectedTakenDate),
             new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
             shipping.courier
         ])

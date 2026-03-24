@@ -4,7 +4,7 @@ var router = express.Router();
 var db = require('../services/DB/db');
 
 var {auth} = require('../utils/jwt_auth');
-const { sampleSchema,sampleStatusSchema } = require('../utils/validator');
+const { sampleSchema,sampleStatusSchema, shipSampleSchema } = require('../utils/validator');
 
 /*
     Route for getting samples data for a specified user id
@@ -117,7 +117,7 @@ router.get('/:id',auth,async (req,res) => {
     Route for shipping a sample with the specified courier
 */
 router.post('/:id/ship',auth,async (req,res) => {
-    const id = req.params.id;
+    const sampleId = req.params.id;
 
     //Verifying if the user has the required permissions
     if(req.user.userType != 'Oncologo'){
@@ -136,16 +136,24 @@ router.post('/:id/ship',auth,async (req,res) => {
         res.status(400).json(error)
         return;
     }
-    
-    
 
-    const shippingId = await db.addShipping(req.body) 
+    const sample = await db.getSample(sampleId)
+    const shippingId = await db.addShipping({
+        sender: (await db.getFacilityFromWorkgroup(sample.oncologiWorkgroup)).id,
+        recipient: (await db.getFacilityFromWorkgroup(sample.analystWorkgroup)).id,
+        expectedTakenDate: req.body.expectedTakenDate,
+        courier: req.body.courier
+    }) 
     
-    if(!shippingId)
-        res.status(500)
+    if(!shippingId){
+        res.sendStatus(500)
+        return
+    }
 
-    if(!await db.setShipping(id,shippingId))
-        res.status(500)
+    if(!await db.setShipping(sampleId,shippingId)){
+        res.sendStatus(500)
+        return
+    }
 
 
     res.send();

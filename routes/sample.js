@@ -11,8 +11,6 @@ const { sampleSchema,sampleStatusSchema, shipSampleSchema } = require('../utils/
 */
 router.get('/',auth,async (req,res) => {
 
-
-
     const analystWorkgroup = req.query?.analystWorkgroup
     const oncologiWorkgroup = req.query?.oncologiWorkgroup
 
@@ -69,14 +67,12 @@ router.post('/',auth,async (req,res) => {
         return
     }
     
-    
-
     //Automatically deciding if it is necessary to use a courier
-    req.body.isCourierUsed = new Boolean(
-        await db.getWorkgroup(req.body.oncologiWorkgroup).facility 
+    req.body.isCourierUsed =(
+        await db.getFacilityFromWorkgroup(req.body.oncologiWorkgroup).id
         != 
-        await db.getWorkgroup(req.body.analystWorkgroupWorkgroup).facility 
-    );
+        await db.getFacilityFromWorkgroup(req.body.analystWorkgroup).id
+    )
 
     //Creating the sample with the informations provided
     if(!await db.addSample(req.body)){ 
@@ -84,8 +80,6 @@ router.post('/',auth,async (req,res) => {
         res.status(500).send()
         return;
     }
-
-    
 
     res.status(201).send();
 })

@@ -54,7 +54,7 @@ const sampleSchema = Joi.object({
     analystWorkgroup: Joi.number().required(),
     typeofBiologicalMaterial: Joi.string().regex(/Tissue|Blood|Other/).required(),
     exhaustedBiologicalMaterial: Joi.boolean().required(),
-    histologicalNumber: Joi.number().required(),
+    histologicalNumber: Joi.string(),
     tissuePreservationMode: Joi.string().regex(/Formalin|Frozen|Paraffin/).allow(null),
     tissueSamplingMode: Joi.string().regex(/Biopsy|Surgery|Cytology/).allow(null),
     otherTissueSamplingMode: Joi.string().allow(null),

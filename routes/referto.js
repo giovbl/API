@@ -100,8 +100,6 @@ router.post('/:id/file',upload.single('refpdf'),async (req,res) => {
         return
     }
 
-    console.log(req.file)
-
     //Initializing S3 client
     const s3c = s3.initializeClient()
 

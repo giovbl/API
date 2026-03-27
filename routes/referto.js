@@ -34,12 +34,14 @@ router.post('/',auth,async (req,res) => {
         return
     }
 
+    const refertoId = await db.addReferto(req.body.referto,req.body.result)
+    
+    if(!refertoId){
+        res.sendStatus(500)
+        return
+    }
 
-    if(!await db.addReferto(req.body.referto,req.body.result))
-        res.status(500)
-
-
-    res.sendStatus(201);
+    res.status(201).json({id: refertoId});
 })
 
 /*
@@ -81,24 +83,29 @@ router.post('/:id/file',upload.single('refpdf'),async (req,res) => {
     const id = req.params.id
 
     //Authentication
-    const auth = authFun(req);
-    if(auth.failed)
-        res.status(401).send()
+    const auth = await authFun(req);
+    if(auth.failed){
+        res.sendStatus(401)
+        return;
+    }
 
     //Verifying if the user has the required permissions
-    if(req.user.userType != 'Analista'){
+    if(auth.user.userType != 'Analista'){
         res.sendStatus(403)
         return
     }
 
-    if(!req.body)
-        res.status(400).send()
+    console.log(req.file)
 
+    //Initializing S3 client
     const s3c = s3.initializeClient()
-    const fileName = await s3.addObject(s3c,req.file.buffer,req.file.mimetype)
 
-    if(!fileName)
-        res.status(500).send()
+    //Uploading PDF to S3 bucket
+    const fileName = await s3.addObject(s3c,req.file.buffer,req.file.mimetype)
+    if(!fileName){
+        res.sendStatus(500)
+        return
+    }
 
     if(!await db.addPDF(id,fileName)){
         res.status(500).send()

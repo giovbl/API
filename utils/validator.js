@@ -121,7 +121,7 @@ const refertoSchema = Joi.object({
 		refertingNotesHrd: Joi.string().allow(""),
 		technicalNotes: Joi.string().allow(""),
 		notesAnalysisCenter: Joi.string().allow("")
-	}).optional()
+	}).optional().allow(null)
 })
 
 module.exports = {

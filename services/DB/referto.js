@@ -48,7 +48,7 @@ const getRefertoResQuery = "SELECT "+
  * Creates a referto
  * @param {Object} referto Elegibility data about the referto
  * @param {Object} result Results about the referto
- * @returns {boolean} If the operation is successfull
+ * @returns {Number} The Id of the created referto
  */
 async function addReferto(referto,result) {
     try{
@@ -62,14 +62,14 @@ async function addReferto(referto,result) {
             await conn.query(addRefertoLabelReasonQuery,[
                 referto.notElegibleReason,
                 referto.otherNotElegibleReason,
-                refId
+                refId[0].id
             ])
         }
 
         if(!referto.notElegibleReason){
             await conn.query(addRefertoSampleElReasonQuery,[
                 referto.reasonSampleNotElegible,
-                refId
+                refId[0].id
             ])
         }
 
@@ -87,14 +87,13 @@ async function addReferto(referto,result) {
             ])
 
             await conn.query("UPDATE RefertoElegibile SET result = ? WHERE id = ?",
-                            [resId,refId])
+                            [resId[0].id,refId[0].id])
         }
 
-        return true;
+        return refId[0].id;
     }
     catch(error){
-        console.log(error)
-        return false;
+        return null;
     }
 }
 

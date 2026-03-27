@@ -2,8 +2,10 @@ const conn = require('./config')
 
 const addRefertoEssentialsQuery = "INSERT INTO RefertoElegibile("+
                                   "isLabelEligible,isSampleElegible,"+
+                                  "notElegibleReason,otherNotElegibleReason,"+
+                                  "reasonSampleNotElegible,"+
                                   "ref_sample"+
-                                  ") VALUES(?,?,?) RETURNING id"
+                                  ") VALUES(?,?,?,?,?,?) RETURNING id"
 
 const addRefertoLabelReasonQuery = "UPDATE RefertoElegibile "+
             "SET notElegibleReason = ?,otherNotElegibleReason = ? "+
@@ -27,6 +29,8 @@ const addPDFQuery = "UPDATE RefertoElegibile SET file_pdf = ? "+
 
 const getRefertoQuery = "SELECT id,"+
                         "isLabelEligible,isSampleElegible,"+
+                        "notElegibleReason,otherNotElegibleReason,"+
+                        "reasonSampleNotElegible,summary"+
                         "result,ref_sample AS 'sample',"+
                         "file_pdf AS refertoPdf "+
                         "FROM RefertoElegibile WHERE id = ?"
@@ -55,6 +59,9 @@ async function addReferto(referto,result) {
         const refId = await conn.query(addRefertoEssentialsQuery,[
             referto.isLabelEligible,
             referto.isSampleElegible,
+            referto.notElegibleReason,
+            referto.otherNotElegibleReason,
+            referto.reasonSampleNotElegible,
             referto.sample
         ])
 

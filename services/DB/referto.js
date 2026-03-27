@@ -178,7 +178,10 @@ async function getRefertoId(sampleId) {
                                     [sampleId])
 
         if(!res)
-            return {}
+            return null
+
+        if(!res[0])
+            return null
 
         return res[0].id;
     }

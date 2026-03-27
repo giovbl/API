@@ -34,9 +34,9 @@ router.get('/',auth,async (req,res) => {
                 
                 const fac = await db.getFacility(out[i].oncologiWorkgroup.facility)
                 out[i].oncologiWorkgroup.facility = {nome: fac.nome, id: fac.id}
-
-                out[i].referto = await db.getRefertoId(out[i].id)
             }
+
+            out[i].referto = await db.getRefertoId(out[i].id)
 
             if(out[i].shipment)
                 out[i].shipment = await db.getShipping(out[i].id)

@@ -30,7 +30,7 @@ const addPDFQuery = "UPDATE RefertoElegibile SET file_pdf = ? "+
 const getRefertoQuery = "SELECT id,"+
                         "isLabelEligible,isSampleElegible,"+
                         "notElegibleReason,otherNotElegibleReason,"+
-                        "reasonSampleNotElegible,summary"+
+                        "reasonSampleNotElegible,summary,"+
                         "result,ref_sample AS 'sample',"+
                         "file_pdf AS refertoPdf "+
                         "FROM RefertoElegibile WHERE id = ?"

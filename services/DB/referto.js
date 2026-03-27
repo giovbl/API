@@ -100,6 +100,7 @@ async function addReferto(referto,result) {
         return refId[0].id;
     }
     catch(error){
+        console.log(error)
         return null;
     }
 }

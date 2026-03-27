@@ -61,6 +61,11 @@ router.get('/:id',auth,async (req,res) => {
 
     const out = await db.getReferto(id)
 
+    if(!out){
+        res.sendStatus(404)
+        return
+    }
+
     //Getting Referto results if exists
     if(out.result)
         out.result = await db.getRefertoRes(out.result)

@@ -4,6 +4,20 @@ const { S3Client, PutObjectCommand, GetObjectCommand, S3ServiceException } = req
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 /**
+ * Creates a new S3 client
+ * @returns The created client
+ */
+function initializeS3Client() {
+    return new S3Client({
+        region: "eu-north-1",
+        credentials: {
+            accessKeyId: process.env.AMAZON_SDK_KEY_ID,
+            secretAccessKey: process.env.AMAZON_SDK_SECRET
+        }
+    })
+}
+
+/**
  * Creates a SHA-256 hash of the given data
  * @param {any} data Data to hash
  * @returns {string} The generated hash
@@ -12,20 +26,6 @@ function createHash(data) {
     const hash = crypto.createHash('sha256');
     hash.update(data);
     return hash.digest('hex');
-}
-
-/**
- * Creates a new S3 client
- * @returns The created client
- */
-function initializeClient() {
-    return new S3Client({
-        region: "eu-north-1",
-        credentials: {
-            accessKeyId: process.env.AMAZON_SDK_KEY_ID,
-            secretAccessKey: process.env.AMAZON_SDK_SECRET
-        }
-    })
 }
 
 /**
@@ -85,7 +85,7 @@ async function addObject(client,objBuffer,objMeta) {
 }
 
 module.exports = {
-    initializeClient,
+    initializeS3Client,
     getObjectURL,
     addObject
 }

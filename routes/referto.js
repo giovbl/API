@@ -6,7 +6,8 @@ const storage = multer.memoryStorage()
 const upload = multer({ storage: storage })
 
 var db = require('../services/DB/db');
-var s3 = require('../services/storage/s3')
+var s3 = require('../services/aws/s3')
+var lambda = require('../services/aws/lambda')
 
 var {auth,authFun} = require('../utils/jwt_auth');
 const { refertoSchema } = require('../utils/validator');
@@ -41,6 +42,15 @@ router.post('/',auth,async (req,res) => {
         return
     }
 
+    //Creating 
+    const lc = lambda.initializeLambdaClient()
+
+    //Inovking Lambda function for generating the summary
+    if(!await lambda.invokeSummary(lc,refertoId)){
+        res.sendStatus(500)
+        return
+    }
+
     res.status(201).json({id: refertoId});
 })
 
@@ -71,7 +81,7 @@ router.get('/:id',auth,async (req,res) => {
         out.result = await db.getRefertoRes(out.result)
 
     //GEtting URL for the PDF
-    const s3c = s3.initializeClient()
+    const s3c = s3.initializeS3Client()
     out.refertoPdf = await s3.getObjectURL(s3c,out.refertoPdf);
 
     //Getting sample data if specified
@@ -101,7 +111,7 @@ router.post('/:id/file',upload.single('refpdf'),async (req,res) => {
     }
 
     //Initializing S3 client
-    const s3c = s3.initializeClient()
+    const s3c = s3.initializeS3Client()
 
     //Uploading PDF to S3 bucket
     const fileName = await s3.addObject(s3c,req.file.buffer,req.file.mimetype)
@@ -110,8 +120,10 @@ router.post('/:id/file',upload.single('refpdf'),async (req,res) => {
         return
     }
 
+    //Adding PDF url to DB
     if(!await db.addPDF(id,fileName)){
-        res.status(500).send()
+        res.sendStatus(500)
+        return
     }
 
     res.status(201).send()

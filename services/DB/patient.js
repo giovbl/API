@@ -11,7 +11,7 @@ const addQuery = "INSERT INTO Patient (fiscalCode,isForeign,b_name,surname,"+
     "allergies,previousTreatments)"+
     "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
-const getQuery = "SELECT fiscalCode,isForeign,b_name AS 'name',surname,"+
+const getQuery = "SELECT id,fiscalCode,isForeign,b_name AS 'name',surname,"+
     "birthDate,initials,gender,ethnicOrigin,otherEthnicOrigin,"+
     "residenceRegion,residenceCity,residenceProvince,"+
     "cap,r_address AS 'address',civicNumber,phone,privacyAndConditions,"+
@@ -20,9 +20,9 @@ const getQuery = "SELECT fiscalCode,isForeign,b_name AS 'name',surname,"+
     "isoTypeOtherDetails,hasReceivedSystemicTreatment,"+
     "platinumSensitive,oncologistNotes,"+
     "allergies,previousTreatments "+
-    "FROM Patient WHERE fiscalCode = ?";
+    "FROM Patient WHERE id = ?";
 
-const getPatientsQuery = "SELECT fiscalCode,isForeign,b_name AS 'name',surname,"+
+const getPatientsQuery = "SELECT id,fiscalCode,isForeign,b_name AS 'name',surname,"+
     "birthDate,initials,gender,ethnicOrigin,otherEthnicOrigin,"+
     "residenceRegion,residenceCity,residenceProvince,"+
     "cap,r_address AS 'address',civicNumber,phone,privacyAndConditions,"+
@@ -65,12 +65,12 @@ async function addPatient(patient) {
 
 /**
  * Gets data about a patient
- * @param {string} fiscalCode Fiscal code of the patient
+ * @param {string} id Patient ID
  * @returns {Object} Patient data
  */
-async function getPatient(fiscalCode) {
+async function getPatient(id) {
     try{
-        const res = await conn.query(getQuery,[fiscalCode])
+        const res = await conn.query(getQuery,[id])
 
         if(!res)
             return {}

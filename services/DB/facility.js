@@ -18,7 +18,7 @@ const getFacilitiesQuery = getFacilityPartialQuery + "FROM Facility"
 
 const getFacilityWorkgroupQuery = getFacilityPartialQuery + 
                                 "FROM Facility WHERE id = ("+
-                                "SELECT facility FROM WorkGroup WHERE id = ?)"
+                                "SELECT facility FROM WorkGroup WHERE id = ? )"
                         
 
 /**

@@ -66,13 +66,11 @@ router.post('/',auth,async (req,res) => {
         res.status(400).json(error)
         return
     }
-    
+
+    const owf = await db.getFacilityFromWorkgroup(req.body.oncologiWorkgroup)
+    const awf = await db.getFacilityFromWorkgroup(req.body.analystWorkgroup)
     //Automatically deciding if it is necessary to use a courier
-    req.body.isCourierUsed =(
-        await db.getFacilityFromWorkgroup(req.body.oncologiWorkgroup).id
-        != 
-        await db.getFacilityFromWorkgroup(req.body.analystWorkgroup).id
-    )
+    req.body.isCourierUsed =(owf.id != awf.id)
 
     //Creating the sample with the informations provided
     if(!await db.addSample(req.body)){ 

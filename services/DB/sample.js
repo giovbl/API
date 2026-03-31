@@ -16,6 +16,7 @@ const selectInitialQuery ="SELECT id,"+
                 "otherTissueSamplingMode,biopsyType,"+
                 "tissueProvenance,metaStaticSite,pctTumorCells,"+
                 "ageOfSample,isCourierUsed,pathologistNotes,"+
+                "patient AS patientId,"+
                 "(SELECT fiscalCode FROM Patient WHERE id=Sample.patient) AS patient,"+
                 "analysisStat,shipping as 'shipment',oncologiWorkgroup "+
                 "FROM Sample "

@@ -7,7 +7,7 @@ const addQuery = "INSERT INTO Sample("+
     "otherTissueSamplingMode,biopsyType,tissueProvenance,"+
     "metaStaticSite,pctTumorCells,ageOfSample,isCourierUsed,"+
     "pathologistNotes,patient,oncologiWorkgroup"+
-    ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+    ") VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,(SELECT id FROM Patient WHERE fiscalCode = ?),?)"
 
 const selectInitialQuery ="SELECT id,"+
                 "analystWorkgroup,typeOfBiologicalMaterial,"+

@@ -5,7 +5,9 @@ const conn = mariadb.createPool({
     user: process.env.MARIADB_USER,
     database: process.env.MARIADB_DB,
     password: process.env.MARIADB_USER_PWD,
-    ssl: { rejectUnauthorized: false }
+    ssl: { rejectUnauthorized: false },
+    connectionLimit: 5,
+    idleTimeout: 30000
 })
 
 module.exports = conn;

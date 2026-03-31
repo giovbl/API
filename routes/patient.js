@@ -57,7 +57,7 @@ router.get('/',auth,async (req,res) => {
 /*
     Route for verifying patient existence by it's fiscal code
 */
-router.get('/exists',auth,async (req,res) => {
+router.post('/exists',auth,async (req,res) => {
 
     if(!req.body)
         return res.sendStatus(400)
@@ -66,12 +66,7 @@ router.get('/exists',auth,async (req,res) => {
 
     const dbres = await db.patientExists(fiscalCode)
 
-    if(!dbres){
-        res.sendStatus(404)
-        return;
-    }
-
-    res.json(dbres);
+    res.send({exists:Boolean(dbres)})
 })
 
 /*

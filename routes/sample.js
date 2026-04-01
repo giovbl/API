@@ -39,7 +39,7 @@ router.get('/',auth,async (req,res) => {
             out[i].referto = await db.getRefertoId(out[i].id)
 
             if(out[i].shipment)
-                out[i].shipment = await db.getShipping(out[i].id)
+                out[i].shipment = await db.getShipping(out[i].shipment)
         }
     }
 

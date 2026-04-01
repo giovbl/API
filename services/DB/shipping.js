@@ -36,7 +36,7 @@ async function addShipping(shipping) {
             shipping.sender,
             shipping.recipient,
             new Date(shipping.expectedTakenDate),
-            new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+            new Date(shipping.expectedTakenDate + 5 * 24 * 60 * 60 * 1000),
             shipping.courier
         ])
 

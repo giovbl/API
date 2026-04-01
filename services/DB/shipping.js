@@ -31,12 +31,13 @@ const getShippingQuery = "SELECT id,"+
 async function addShipping(shipping) {
 
     try{
+        const expDate = new Date(shipping.expectedTakenDate)
 
         const rows = await conn.query(addQuery,[
             shipping.sender,
             shipping.recipient,
-            new Date(shipping.expectedTakenDate),
-            new Date(shipping.expectedTakenDate + 5 * 24 * 60 * 60 * 1000),
+            new Date(expDate),
+            new Date(expDate.setDate(expDate.getDate() + 5)),
             shipping.courier
         ])
 

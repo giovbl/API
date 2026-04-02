@@ -1,6 +1,7 @@
 const express = require('express');
 var cors = require('cors');
 const cookieParser = require('cookie-parser')
+const path = require('path');
 
 require('dotenv').config()
 
@@ -31,6 +32,13 @@ app.use('/api/shipment',shipmentRouter);
 app.use('/api/referto',refertoRouter)
 app.use('/api/facility',facilityRouter)
 app.use('/api/user',userRouter)
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, 'dist')));
+//Route for serving React static files
+app.get('/*path', (req, res) => {
+  res.sendFile(path.join(__dirname,'dist', 'index.html'));
+});
 
 
 app.listen(port, () => {

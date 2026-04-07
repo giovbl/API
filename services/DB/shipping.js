@@ -12,7 +12,14 @@ const getShippingsQuery = "SELECT id,"+
                         "del_date_ext AS expectedDeliveryDate,"+
                         "taken_eff AS effectiveTakenDate,"+
                         "del_date_eff AS effectiveDeliveryDate "+
-                        "FROM Shipping WHERE courier = ? "
+                        "FROM Shipping WHERE courier = ?"
+
+const getShipmentsWithQuery = getShippingsQuery + " AND (id = ? OR "+
+    "(SELECT 1 FROM Facility WHERE id = Shipping.recipient AND "+
+    "(residenceCity LIKE ? OR CONCAT(CONCAT(r_address,' '),cap) LIKE ?)) OR "+
+    "(SELECT 1 FROM Facility WHERE id = Shipping.sender AND "+
+    "(residenceCity LIKE ? OR CONCAT(CONCAT(r_address,' '),cap) LIKE ?)) OR "+
+    "(SELECT 1 FROM Sample WHERE shipping = Shipping.id AND id = ?))"
 
 const getShippingQuery = "SELECT id,"+
                         "d_status AS 'status',"+
@@ -68,6 +75,44 @@ async function getShippings(id) {
 }
 
 /**
+ * Gets all the shipments for the specified courier,filtered by query
+ * @param {number} id Courier ID
+ * @param {string} query Query for filtering shipments
+ * @returns {Array<Object>} Array of shipments
+ */
+async function queryShipments(id,query) {
+    const qid = Number(query)
+
+    try{
+        const res = await conn.query(getShipmentsWithQuery,[
+            id,((Number.isNaN(qid))?0:qid),
+            `%${query}%`,`%${query}%`,
+            `%${query}%`,`%${query}%`,
+            ((Number.isNaN(qid))?0:qid)
+        ])
+
+        return res;
+    }
+    catch(error){
+        console.log(error)
+        console.log(getShipmentsWithQuery)
+        return null;
+    }
+}
+
+/*setData(data.filter((itm) =>
+            String(itm.id).includes(query) ||
+            itm.recipient.residenceCity.toLowerCase().includes(query) ||
+            itm.recipient.cap.toLowerCase().includes(query) ||
+            (itm.recipient.address+' '+itm.recipient.civicNumber).toLowerCase().includes(query) ||
+            itm.sender.residenceCity.toLowerCase().includes(query) ||
+            itm.sender.cap.toLowerCase().includes(query) ||
+            (itm.sender.address+' '+itm.sender.civicNumber).toLowerCase().includes(query) ||
+            shipmentString(itm.status).toLowerCase().includes(query) ||
+            String(itm.sample).includes(query)
+        ))*/
+
+/**
  * Gets data about a shipping
  * @param {number} shippingId Shipping ID
  * @returns {Object} The requested shipping
@@ -119,5 +164,6 @@ module.exports = {
     addShipping,
     getShipping,
     getShippings,
-    setShippingStatus
+    setShippingStatus,
+    queryShipments
 }

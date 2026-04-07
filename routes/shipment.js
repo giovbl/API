@@ -12,6 +12,8 @@ const { shipmentStatusSchema } = require('../utils/validator');
 */
 router.get('/',auth,async (req,res) => {
 
+    const query = req.query?.q
+
     //Verifying if the user has the required permissions
     if(req.user.userType != 'Corriere'){
         res.sendStatus(403)
@@ -20,7 +22,11 @@ router.get('/',auth,async (req,res) => {
     
     const userId = req.user.id;
     
-    const dbres = await db.getShippings(userId)
+    let dbres;
+    if(query)
+        dbres = await db.queryShipments(userId,query)
+    else
+        dbres = await db.getShippings(userId)
 
     /*
     Adding:

@@ -111,9 +111,10 @@ async function getPatients() {
  * @returns {Object} Patient data
  */
 async function queryPatients(query) {
+    const qid = Number(query);
     try{
         const res = await conn.query(getPatientsWithQuery,[
-            Number(query),`%${query}%`,`%${query}%`
+            ((Number.isNaN(qid))?0:qid),`%${query}%`,`%${query}%`
         ])
 
         if(!res)

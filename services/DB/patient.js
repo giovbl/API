@@ -33,7 +33,7 @@ const getPatientsQuery = "SELECT id,fiscalCode,isForeign,b_name AS 'name',surnam
     "allergies,previousTreatments "+
     "FROM Patient ";
 
-const getPatientsWithQuery = getPatientsQuery + " WHERE id = ? OR fiscalCode LIKE ? "+
+const getPatientsWithQuery = getPatientsQuery + " WHERE fiscalCode LIKE ? "+
     "OR (CONCAT(CONCAT(b_name,' '),surname) LIKE ? )"
 
 /**
@@ -114,7 +114,7 @@ async function queryPatients(query) {
     const qid = Number(query);
     try{
         const res = await conn.query(getPatientsWithQuery,[
-            ((Number.isNaN(qid))?0:qid),`%${query}%`,`%${query}%`
+            `%${query}%`,`%${query}%`
         ])
 
         if(!res)

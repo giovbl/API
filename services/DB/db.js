@@ -1,6 +1,6 @@
 const {login, addSession, sessionExists} = require('./auth')
 const {addPatient, getPatient, patientExists, getPatients, queryPatients} = require('./patient')
-const {addSample, getSamples, getSample, setSampleStatus, setShipping, getShipmentSampleId} = require('./sample')
+const {addSample, getSamples, getSample, setSampleStatus, setShipping, getShipmentSampleId, querySamples} = require('./sample')
 const {addShipping, getShippings, getShipping, setShippingStatus} = require('./shipping')
 const {getFacility,getFacilities, getFacilityFromWorkgroup, getWorkgroup, getWorkgroups}  = require('./facility')
 const {addReferto, getReferto, getRefertoRes,getRefertoId,addPDF} = require('./referto')
@@ -19,6 +19,7 @@ module.exports = {
     getSamples,
     getSample,
     setSampleStatus,
+    querySamples,
     setShipping,
     addShipping,
     getShippings,

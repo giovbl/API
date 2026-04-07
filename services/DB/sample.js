@@ -23,6 +23,12 @@ const selectInitialQuery ="SELECT id,"+
 
 const getSamplesQuery = selectInitialQuery + "WHERE (analystWorkgroup = ?) OR (oncologiWorkgroup = ?)"
 
+const rightworgkroup = "SELECT id FROM WorkGroup WHERE id != ? AND (id = Sample.oncologiWorkgroup OR id = Sample.analystWorkgroup)"
+const getSamplesWithQuery = getSamplesQuery + " AND (id = ? OR "+
+    `(SELECT 1 FROM WorkGroup WHERE id = (${rightworgkroup}) AND groupName LIKE ?) OR `+
+    `(SELECT 1 FROM Facility WHERE id = (SELECT facility FROM WorkGroup WHERE id = (${rightworgkroup})) AND nome LIKE ?) OR `+
+    "(SELECT 1 FROM Patient WHERE id = Sample.patient AND fiscalCode LIKE ?))"
+
 const getSampleQuery = selectInitialQuery + "WHERE id = ?"
 
     
@@ -60,8 +66,34 @@ async function addSample(sample)
  */
 async function getSamples(workgroupId) {
     try{
-        const res = await conn.query(getSamplesQuery,
+        const res = await conn.query(getSamplesQuery + " LIMIT 10",
                                     [workgroupId,workgroupId])
+
+        return res;
+    }
+    catch(error){
+        console.log(error)
+        return null;
+    }
+}
+
+/**
+ * Gets all the samples created/assigned by a workgroup, filtered by a query
+ * @param {number} workgroupId Workgroup ID
+ * @param {string} query Query for filtering samples
+ * @returns {Array<Object>} The resulting samples
+ */
+async function querySamples(workgroupId,query) {
+    const qid = Number(query)
+
+    try{
+        const res = await conn.query(getSamplesWithQuery,[
+            workgroupId,workgroupId,
+            ((Number.isNaN(qid))?0:qid),
+            workgroupId,`%${query}%`,
+            workgroupId,`%${query}%`,
+            `%${query}%`
+        ])
 
         return res;
     }
@@ -150,5 +182,6 @@ module.exports = {
     getSample,
     setSampleStatus,
     setShipping,
-    getShipmentSampleId
+    getShipmentSampleId,
+    querySamples
 }

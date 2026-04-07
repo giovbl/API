@@ -13,8 +13,13 @@ router.get('/',auth,async (req,res) => {
 
     const analystWorkgroup = req.query?.analystWorkgroup
     const oncologiWorkgroup = req.query?.oncologiWorkgroup
+    const query = req.query?.q
 
-    const out = await db.getSamples(await db.getUserWorkgroupID(req.user.id))
+    let out; 
+    if(query)
+        out = await db.querySamples(await db.getUserWorkgroupID(req.user.id),query)
+    else
+        out = await db.getSamples(await db.getUserWorkgroupID(req.user.id))
 
     //Adding requested workgroup data
     if(req.params){

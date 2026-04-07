@@ -49,9 +49,12 @@ router.post('/',auth,async (req,res) => {
 */
 router.get('/',auth,async (req,res) => {
 
-    const dbres = await db.getPatients()
-
-    res.json(dbres);
+    const query = req.query?.q;
+    
+    if(query)
+        res.json(await db.queryPatients(query))
+    else
+        res.json(await db.getPatients())
 })
 
 /*

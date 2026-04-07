@@ -31,7 +31,10 @@ const getPatientsQuery = "SELECT id,fiscalCode,isForeign,b_name AS 'name',surnam
     "isoTypeOtherDetails,hasReceivedSystemicTreatment,"+
     "platinumSensitive,oncologistNotes,"+
     "allergies,previousTreatments "+
-    "FROM Patient";
+    "FROM Patient ";
+
+const getPatientsWithQuery = getPatientsQuery + " WHERE id = ? OR fiscalCode LIKE ? "+
+    "OR (CONCAT(CONCAT(b_name,' '),surname) LIKE ? )"
 
 /**
  * Creates a new patient
@@ -89,7 +92,29 @@ async function getPatient(id) {
  */
 async function getPatients() {
     try{
-        const res = await conn.query(getPatientsQuery)
+        const res = await conn.query(getPatientsQuery+" LIMIT 10")
+
+        if(!res)
+            return {}
+
+        return res;
+    }
+    catch(error){
+        console.log(error)
+        return null;
+    }
+}
+
+/**
+ * Gets patients filtered by a query
+ * @param {string} query Query for filtering patients
+ * @returns {Object} Patient data
+ */
+async function queryPatients(query) {
+    try{
+        const res = await conn.query(getPatientsWithQuery,[
+            Number(query),`%${query}%`,`%${query}%`
+        ])
 
         if(!res)
             return {}
@@ -123,5 +148,6 @@ module.exports = {
     addPatient,
     getPatient,
     getPatients,
+    queryPatients,
     patientExists
 }

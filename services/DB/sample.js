@@ -66,7 +66,7 @@ async function addSample(sample)
  */
 async function getSamples(workgroupId) {
     try{
-        const res = await conn.query(getSamplesQuery + " LIMIT 10",
+        const res = await conn.query(getSamplesQuery + " LIMIT 10 ORDER BY id DESC",
                                     [workgroupId,workgroupId])
 
         return res;
@@ -87,7 +87,7 @@ async function querySamples(workgroupId,query) {
     const qid = Number(query)
 
     try{
-        const res = await conn.query(getSamplesWithQuery,[
+        const res = await conn.query(getSamplesWithQuery + " LIMIT 10 ORDER BY id DESC",[
             workgroupId,workgroupId,
             ((Number.isNaN(qid))?0:qid),
             workgroupId,`%${query}%`,

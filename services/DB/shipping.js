@@ -64,7 +64,7 @@ async function addShipping(shipping) {
  */
 async function getShippings(id) {
     try{
-        const res = await conn.query(getShippingsQuery,[id])
+        const res = await conn.query(getShippingsQuery + " ORDER BY id DESC",[id])
 
         return res;
     }
@@ -84,7 +84,7 @@ async function queryShipments(id,query) {
     const qid = Number(query)
 
     try{
-        const res = await conn.query(getShipmentsWithQuery,[
+        const res = await conn.query(getShipmentsWithQuery + " ORDER BY id DESC",[
             id,((Number.isNaN(qid))?0:qid),
             `%${query}%`,`%${query}%`,
             `%${query}%`,`%${query}%`,

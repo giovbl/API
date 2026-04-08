@@ -113,7 +113,7 @@ async function getPatients() {
 async function queryPatients(query) {
     const qid = Number(query);
     try{
-        const res = await conn.query(getPatientsWithQuery,[
+        const res = await conn.query(getPatientsWithQuery + " LIMIT 10 ORDER BY id DESC",[
             `%${query}%`,`%${query}%`
         ])
 

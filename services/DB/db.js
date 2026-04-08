@@ -1,4 +1,4 @@
-const {login, addSession, sessionExists} = require('./auth')
+const {login, addSession, sessionValid} = require('./auth')
 const {addPatient, getPatient, patientExists, getPatients, queryPatients} = require('./patient')
 const {addSample, getSamples, getSample, setSampleStatus, setShipping, getShipmentSampleId, querySamples} = require('./sample')
 const {addShipping, getShippings, getShipping, setShippingStatus, queryShipments} = require('./shipping')
@@ -9,7 +9,7 @@ const {getUserWorkgroupID, setUserWorkgroup, addUser, userExists, getUser, getCo
 module.exports = {
     login,
     addSession,
-    sessionExists,
+    sessionValid,
     addPatient,
     getPatient,
     getPatients,

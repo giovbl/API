@@ -73,7 +73,7 @@ router.post('/refresh',async (req,res) => {
             return res.sendStatus(401)
 
         //Verifying if a session with this token exists
-        if(!await db.sessionExists(refreshCookie)){        
+        if(!await db.sessionValid(refreshCookie,user.id)){        
             return res.sendStatus(401)
         }
 

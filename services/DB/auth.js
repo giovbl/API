@@ -40,8 +40,10 @@ async function login(email,pwd) {
  */
 async function addSession(refresh,id) {
 
+    const hashToken = await bcrypt.hash(refresh,12)
+
     try{
-        await conn.query("INSERT INTO Session (token,user) VALUES (?,?)",[refresh,id])
+        await conn.query("INSERT INTO Session (token,user) VALUES (?,?)",[hashToken,id])
         return true;
     }
     catch(error){
@@ -52,16 +54,22 @@ async function addSession(refresh,id) {
 }
 
 /**
- * Verifies if a user's session exists
+ * Verifies if a user's session is valid
  * @param {string} refresh Refresh token of the session
- * @returns {boolean} If the session exists
+ * @param {number} User ID
+ * @returns {boolean} If the session is valid
  */
-async function sessionExists(refresh) {
+async function sessionValid(refresh,userId) {
 
     try{
-        const user = await conn.query("SELECT user FROM Session WHERE token=?",[refresh])
+        const user = await conn.query("SELECT token,valid FROM Session WHERE user=?",[userId])
 
-        return (user ? true : false);
+        if(!user)
+            return false
+        
+        const vt = await bcrypt.compare(refresh,user.token)
+
+        return user[0].valid && vt
     }
     catch(error){
         console.log(error)
@@ -72,5 +80,5 @@ async function sessionExists(refresh) {
 module.exports = {
     login,
     addSession,
-    sessionExists
+    sessionValid
 }

@@ -24,7 +24,7 @@ async function invokeSummary(client,refertoId){
   })
 
   try{    
-        client.send(command);
+        await client.send(command);
         
         return true;
     }

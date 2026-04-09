@@ -35,16 +35,40 @@ async function login(email,pwd) {
 /**
  * Creates a new session for the user
  * @param {string} refresh Refresh token
- * @param {number} id User's id
- * @returns {boolean} If the operation is successfull
+ * @param {number} userId User's ID
+ * @returns {number} Id of the created session
  */
-async function addSession(refresh,id) {
-
-    const hashToken = await bcrypt.hash(refresh,12)
+async function initSession(userId) {
 
     try{
-        await conn.query("INSERT INTO Session (token,user) VALUES (?,?)",[hashToken,id])
-        return true;
+        const res = await conn.query("INSERT INTO Session (user) VALUES (?) RETURNING id",[userId])
+
+        if(!res)
+            return null
+
+        return res[0].id;
+    }
+    catch(error){
+        console.log(error)
+        return null;
+    }
+
+}
+
+/**
+ * Sets a token for the session
+ * @param {number} id Session ID
+ * @param {string} token Token to memorize in the DB
+ * @returns {boolean} If the operation is successfull
+ */
+async function setSessionToken(id,token) {
+
+    const hashToken = await bcrypt.hash(token,12)
+
+    try{
+        await conn.query("UPDATE Session SET token=? WHERE id=?",[hashToken,id])
+
+        return true
     }
     catch(error){
         console.log(error)
@@ -56,17 +80,17 @@ async function addSession(refresh,id) {
 /**
  * Verifies if a user's session is valid
  * @param {string} refresh Refresh token of the session
- * @param {number} User ID
+ * @param {number} sessionId Session ID
  * @returns {boolean} If the session is valid
  */
-async function sessionValid(refresh,userId) {
+async function sessionValid(refresh,sessionId) {
 
     try{
-        const user = await conn.query("SELECT token,valid FROM Session WHERE user=?",[userId])
+        const user = await conn.query("SELECT token,valid FROM Session WHERE id=?",[sessionId])
 
         if(!user)
             return false
-        
+
         const vt = await bcrypt.compare(refresh,user.token)
 
         return user[0].valid && vt
@@ -77,8 +101,28 @@ async function sessionValid(refresh,userId) {
     }
 }
 
+/**
+ * 
+ * @param {number} id Session ID 
+ * @param {boolean} validity New validity of the session
+ * @returns {boolean} If the operation is successfull
+ */
+async function setSessionValidity(id,validity){
+    try{
+        await conn.query("UPDATE Session SET validity=? WHERE id=?",[validity,id])
+
+        return true
+    }
+    catch(error){
+        console.log(error)
+        return false;
+    }
+}
+
 module.exports = {
     login,
-    addSession,
-    sessionValid
+    initSession,
+    setSessionToken,
+    sessionValid,
+    setSessionValidity
 }

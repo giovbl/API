@@ -41,8 +41,10 @@ router.post('/login',async (req,res) => {
         return;
     }
 
+    const sdata = await createSession(db,dbres.id)
+
     //Storing the refresh token of the new session
-    res.cookie('refreshToken',createSession(db,dbres.id),{
+    res.cookie('refreshToken',sdata.token,{
         path: 'auth/refresh',
         httpOnly:true,
         //secure: true,
@@ -50,7 +52,11 @@ router.post('/login',async (req,res) => {
     })
     
     //Generating and saving the auth token as http-only cookie
-    res.cookie('authToken',createAuthToken({id:dbres.id,userType:dbres.type}),{
+    res.cookie('authToken',createAuthToken({
+                                    id:dbres.id,
+                                    userType:dbres.type,
+                                    sid:sdata.sessionId
+                                }),{
         httpOnly:true,
         //secure: true,
         //sameSite: "none"

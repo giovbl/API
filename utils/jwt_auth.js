@@ -44,22 +44,25 @@ async function authFun(req){
 
 /**
  * Creates a session for a user
- * @param db Database object
+ * @param {Obbject} db Database object
  * @param {mariadb.Connection} dbs DB connection
  * @param {number} userId User's id
  * @returns {string} The generated token for the new session
  */
-function createSession(db,userId){
-
-    //Generting the refresh token
-    const refresh = jwt.sign({id: userId},
-                           process.env.JWT_REFRESH_SECRET,
-                           {expiresIn: "30d"});
+async function createSession(db,userId){
 
     //Creating a new session on the DB
-    db.addSession(refresh,userId);
+    const sid = await db.initSession(userId);
 
-    return refresh;
+    //Generting the refresh token
+    const refresh = jwt.sign({id: userId, sid:sid},
+        process.env.JWT_REFRESH_SECRET,
+        {expiresIn: "30d"}
+    );
+
+    await db.setSessionToken(sid,refresh)
+
+    return {refreshToken: refresh, sessionId: sid}
 }
 
 /**

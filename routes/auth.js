@@ -125,4 +125,18 @@ router.post('/register',async (req,res) => {
         res.sendStatus(201)
 })
 
+/* Route for logging out a user */
+router.get('/logout',auth,async (req,res) => {
+
+    res.clearCookie("authToken")
+    res.clearCookie("refreshToken");
+
+    if(!await db.setSessionValidity(req.user.sid,false)){
+        res.sendStatus(500)
+        return
+    }
+
+    res.json({message:"Logout is a success"})
+})
+
 module.exports = router;

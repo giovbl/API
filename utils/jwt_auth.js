@@ -10,12 +10,12 @@ function auth(req,res,next){
         return res.sendStatus(401);
 
     //Token verification
-    jwt.verify(authCookie, process.env.JWT_AUTH_SECRET, (err, user) => {
+    jwt.verify(authCookie, process.env.JWT_AUTH_SECRET, (err, data) => {
         
         if(err)
             return res.sendStatus(401);
 
-        req.user = user;
+        req.user = data;
         next();
     })
 

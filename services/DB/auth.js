@@ -109,7 +109,7 @@ async function sessionValid(refresh,sessionId) {
  */
 async function setSessionValidity(id,validity){
     try{
-        await conn.query("UPDATE Session SET validity=? WHERE id=?",[validity,id])
+        await conn.query("UPDATE Session SET valid=? WHERE id=?",[validity,id])
 
         return true
     }

@@ -92,7 +92,7 @@ async function getPatient(id) {
  */
 async function getPatients() {
     try{
-        const res = await conn.query(getPatientsQuery+" LIMIT 10")
+        const res = await conn.query(getPatientsQuery + " ORDER BY id DESC LIMIT 10")
 
         if(!res)
             return {}

@@ -84,7 +84,7 @@ async function queryShipments(id,query) {
     const qid = Number(query)
 
     try{
-        const res = await conn.query(getShipmentsWithQuery + " ORDER BY id DESC",[
+        const res = await conn.query(getShipmentsWithQuery + " ORDER BY id DESC LIMIT 10",[
             id,((Number.isNaN(qid))?0:qid),
             `%${query}%`,`%${query}%`,
             `%${query}%`,`%${query}%`,

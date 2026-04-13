@@ -36,8 +36,7 @@ router.post('/login',async (req,res) => {
     const dbres = await db.login(req.body.email,req.body.pwd);
 
     if(!dbres){
-        
-        res.sendStatus(401);
+        res.send({failed: true, message:"Login failed: wrong email or password"});
         return;
     }
 

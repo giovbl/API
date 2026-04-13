@@ -62,7 +62,7 @@ router.post('/login',async (req,res) => {
     })
     
     //Sending as response useful user infos
-    res.json(dbres)
+    res.json({failed: false, requiresConfig: dbres.requiresConfig})
 })
 
 /*

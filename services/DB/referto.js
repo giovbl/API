@@ -157,7 +157,7 @@ async function getRefertoRes(id) {
 async function getRefertoSummary(id) {
 
     try{
-        const res = await conn.query("SELECT summary FROM RefertoElegibile WHERE id=",[id])
+        const res = await conn.query("SELECT summary FROM RefertoElegibile WHERE id=?",[id])
 
         if(!res)
             return {}

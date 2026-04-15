@@ -33,6 +33,11 @@ app.use('/api/referto',refertoRouter)
 app.use('/api/facility',facilityRouter)
 app.use('/api/user',userRouter)
 
+//404 for all non recognized api routes
+app.get('/api/*path', (req, res) => {
+  res.sendStatus(404)
+});
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'dist')));
 //Route for serving React static files

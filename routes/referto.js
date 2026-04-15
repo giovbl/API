@@ -129,4 +129,10 @@ router.post('/:id/file',upload.single('refpdf'),async (req,res) => {
     res.status(201).send()
 })
 
+router.get('/:id/summary',auth,async (req,res) => {
+    const id = req.params.id
+
+    res.json({summary: await db.getRefertoSummary(id)})
+})
+
 module.exports = router

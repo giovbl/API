@@ -150,6 +150,28 @@ async function getRefertoRes(id) {
 }
 
 /**
+ * Gets the summary genereted for a referto
+ * @param {number} id Referto ID
+ * @returns {String | null} The rgenerated summary
+ */
+async function getRefertoSummary(id) {
+
+    try{
+        const res = await conn.query("SELECT summary FROM RefertoElegibile WHERE id=",[id])
+
+        if(!res)
+            return {}
+
+        return res[0].summary;
+    }
+    catch(error){
+        console.log(error)
+        return null;
+    }
+
+}
+
+/**
  * Adds PDF reference to a referto's result
  * @param {number} refertoId Referto ID
  * @param {string} fileName PDF reference
@@ -169,7 +191,7 @@ async function addPDF(refertoId,fileName) {
 
 /**
  * Gets the id of the referto associated to the sample
- * @param {*} sampleId Sample ID
+ * @param {number} sampleId Sample ID
  * @returns The id of the referto
  */
 async function getRefertoId(sampleId) {
@@ -195,6 +217,7 @@ module.exports = {
     addReferto,
     getReferto,
     getRefertoRes,
+    getRefertoSummary,
     getRefertoId,
     addPDF
 }

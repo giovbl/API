@@ -3,7 +3,7 @@ const {addPatient, getPatient, patientExists, getPatients, queryPatients} = requ
 const {addSample, getSamples, getSample, setSampleStatus, setShipping, getShipmentSampleId, querySamples} = require('./sample')
 const {addShipping, getShippings, getShipping, setShippingStatus, queryShipments} = require('./shipping')
 const {getFacility,getFacilities, getFacilityFromWorkgroup, getWorkgroup, getWorkgroups}  = require('./facility')
-const {addReferto, getReferto, getRefertoRes,getRefertoId,addPDF} = require('./referto')
+const {addReferto, getReferto, getRefertoRes,getRefertoId,addPDF, getRefertoSummary} = require('./referto')
 const {getUserWorkgroupID, setUserWorkgroup, addUser, userExists, getUser, getCouriers} = require('./user')
 
 module.exports = {
@@ -37,6 +37,7 @@ module.exports = {
     addReferto,
     getReferto,
     getRefertoRes,
+    getRefertoSummary,
     getRefertoId,
     addPDF,
     addUser,

@@ -43,7 +43,7 @@ const patientSchema = Joi.object({
 	otherHistology: Joi.string().allow(""),
 	isoTypeOtherDetails: Joi.string().allow(""),
 	hasReceivedSystemicTreatment: Joi.boolean().required(),
-	platinumSensitive: Joi.boolean().required(),
+	platinumSensitive: Joi.boolean().allow(null),
 	oncologistNotes: Joi.string().allow(""),
 	allergies: Joi.string().allow(""),
 	previousTreatments: Joi.string().allow("")

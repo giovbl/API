@@ -1,4 +1,5 @@
 const Joi = require('joi');
+const CodiceFiscale = require('codice-fiscale-js');
 
 //Schema for /auth/register
 const registerSchema = Joi.object({
@@ -16,7 +17,9 @@ const loginSchema = Joi.object({
 
 //Schema for /patient
 const patientSchema = Joi.object({
-	fiscalCode: Joi.string().required(),
+	fiscalCode: Joi.string().custom((value, helpers) => {
+		return (CodiceFiscale.check(value))?value.toUpperCase():helpers.message('Fiscal code not valid')
+	},'Fiscal code validation').required(),
 	isForeign: Joi.boolean().required(),
 	name: Joi.string().required(),
 	surname: Joi.string().required(),

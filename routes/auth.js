@@ -44,7 +44,7 @@ router.post('/login',async (req,res) => {
 
     //Storing the refresh token of the new session
     res.cookie('refreshToken',sdata.refreshToken,{
-        //path: 'auth/refresh',
+        path: 'auth/refresh',
         httpOnly:true,
         //secure: true,
         //sameSite: "none"
@@ -78,7 +78,7 @@ router.post('/refresh',async (req,res) => {
             return res.sendStatus(401)
 
         //Verifying if a session with this token exists
-        if(!await db.sessionValid(refreshCookie,user.id)){        
+        if(!await db.sessionValid(refreshCookie,user.sid)){        
             return res.sendStatus(401)
         }
 

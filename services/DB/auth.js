@@ -42,7 +42,7 @@ async function initSession(userId) {
 
     try{
         const res = await conn.query("INSERT INTO Session (user) VALUES (?) RETURNING id",[userId])
-
+        
         if(!res)
             return null
 
@@ -91,7 +91,7 @@ async function sessionValid(refresh,sessionId) {
         if(!user)
             return false
 
-        const vt = await bcrypt.compare(refresh,user.token)
+        const vt = await bcrypt.compare(refresh,user[0].token)
 
         return user[0].valid && vt
     }

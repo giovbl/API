@@ -95,7 +95,7 @@ const userWorkgroupSchema = Joi.object({
 const refertoSchema = Joi.object({
 	referto: Joi.object({
 		isLabelEligible: Joi.boolean().required(),
-		notElegibleReason: Joi.string().allow(""),
+		notElegibleReason: Joi.string().allow(null),
 		otherNotElegibleReason: Joi.string().allow(""),
 		isSampleElegible:Joi.boolean().required(),
 		reasonSampleNotElegible: Joi.string().allow(""),

@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const CodiceFiscale = require('codice-fiscale-js');
-const { parsePhoneNumber } = require('libphonenumber-js');
+const { isValidPhoneNumber } = require('libphonenumber-js');
 
 //Schema for /auth/register
 const registerSchema = Joi.object({
@@ -36,7 +36,7 @@ const patientSchema = Joi.object({
 	address: Joi.string().required(),
 	civicNumber: Joi.number().required(),
 	phone: Joi.string().custom((value, helpers) => {
-		return (parsePhoneNumber(value,'IT').isValid())?value:helpers.message('Phone number not valid')
+		return (isValidPhoneNumber(value,'IT'))?value:helpers.message('Phone number not valid')
 	},'Fiscal code validation').required(),
 	privacyAndConditions: Joi.boolean().required(),
 	privacyPersonalData: Joi.boolean().required(),
